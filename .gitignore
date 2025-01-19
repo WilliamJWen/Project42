@@ -169,3 +169,11 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Latex output files
+reports/2.7_Project_Proposal/latex/APS360_Project.aux
+reports/2.7_Project_Proposal/latex/APS360_Project.fdb_latexmk
+reports/2.7_Project_Proposal/latex/APS360_Project.fls
+reports/2.7_Project_Proposal/latex/APS360_Project.out
+reports/2.7_Project_Proposal/latex/APS360_Project.pdf
+reports/2.7_Project_Proposal/latex/APS360_Project.synctex.gz
