@@ -172,6 +172,8 @@ cython_debug/
 
 # Latex output files
 reports/2.7_Project_Proposal/latex/APS360_Project.aux
+reports/2.7_Project_Proposal/latex/APS360_Project.bbl
+reports/2.7_Project_Proposal/latex/APS360_Project.blg
 reports/2.7_Project_Proposal/latex/APS360_Project.fdb_latexmk
 reports/2.7_Project_Proposal/latex/APS360_Project.fls
 reports/2.7_Project_Proposal/latex/APS360_Project.out
