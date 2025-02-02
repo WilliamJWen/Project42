@@ -179,3 +179,5 @@ cython_debug/
 *.out
 *.pdf
 *.synctex.gz
+
+.vscode
