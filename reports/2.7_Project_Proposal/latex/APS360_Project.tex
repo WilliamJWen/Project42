@@ -32,9 +32,9 @@ WILLIAM (FILL OUT)  \\
 Student\# 1005678901 \\
 \texttt{author3@mail.utoronto.ca} \\
 \And
-PAUL (FILL OUT) \\
-Student\# 1005678901 \\
-\texttt{author4@mail.utoronto.ca} \\
+PAUL Zhao \\
+Student\# 1009052276 \\
+\texttt{paul.zhao@mail.utoronto.ca} \\
 \AND
 }
 
@@ -113,13 +113,27 @@ This method was able to achieve an accuracy of 90\%, better than many other SoTA
 
 \section{Data Processing}
 \label{data}
+In this project, three datasets are required: a training set, a testing set, and a validation set. As will be discussed in the following section, the Zero-Shot Entropy Detector (ZED) architecture is designed to be trained exclusively on real images, eliminating the need for synthetic data during training. To ensure that the model is generalizable to realworld data, and to avoid any issues like poor accuracy and overfitting, it is crucial to process training data so that all biases in the images are eliminated. The most impactful bias identified is the semantic content of images. 
+\subsection{Data Collection}
+To guarantee that the model is exposed to a diverse range of semantics, we will utilize two well-established camera-based digital forensics datasets: 1. RAISE: A Raw Images Dataset For Digital Image Forensics; 2.The ‘Dresden Image Database’ For Benchmarking Digital Image Forensics. These datasets collectively contain approximately 22,000 real images, captured under varying conditions and environments. The model will be trained in two phases which will be mentioned in detail later. For the first phase, 10,000 real images will be allocated for training and 2,000 real images for validation. For the second phase, 5,000 real images will be allocated for training and 1,000 images for validation. The remaining 2,000 real images will be reserved for evaluation in the testing phase. For the second phase, 5,000 synthetic images will also be used to training and 1,000 for validation which enables the model to develop a robust entropy-based understanding of real-world image statistics.
+The testing dataset will be balanced, comprising 2,000 real images and 2,000 AI-generated images. The synthetic images will be sourced from the SyntheticEye AI-Generated Image Dataset [SyntheticEye Reference], which includes images produced by a range of state-of-the-art generative models, including Stable Diffusion, DALL·E, and others. Incorporating AI-generated images from multiple sources ensures that the testing conditions closely reflect real-world inputs, enhancing the model’s ability to generalize across diverse synthetic image distributions.
 
-Data processing here
+\subsection{Data Modification}
+For image inputs, the CNN requires a fixed resolution of 256×256 pixels. To ensure compatibility, all images in both the training and testing datasets will be cropped to 256×256 while preserving their essential features.
+Additionally, to prevent any biases arising from variations in image attributes, all datasets will be normalized and standardized. This includes converting all images to RGB color space, ensuring uniform channel distributions across the dataset. Standardizing the color format enhances consistency in feature representation, improving the model's robustness and generalization.
 
 \section{Architecture}
 \label{arch}
+\subsection{Motivation}
+Nowadays, image classification models typically use Convolutional Neural Network (CNN) as their base architecture. Classical CNNs will use datasets that consists of AI-generated images to train and learn special attributes about these artificial pictures. But inefficiencies in the training process of CNNs are starting to surface as more and more image generation models are being released. With more image generation models come different characteristics that the CNN classifier never learned. This leads towards a need for training with the new datasets which both takes time and money (Cozzolino et al. 2024).
 
-Architecture here
+The Zero-Shot Entropy Detector(ZED) is unique in a way that its training process for detecting AI-generated images doesn’t rely on synthetic data sets. The main idea behind ZED is to estimate how “surprising” an image is compared to the real images it trained on. It is assumed that real images follow a “natural” statistic pattern, while AI-generated images typically consists of “unnatural” statistical patterns that are detectable \citep{cozzolino2024zeroshotdetectionaigeneratedimages}.
+
+
+\subsection{Architecture}
+The architecture of our neural network consists of two phases: CNN training and entropy based classification. In the CNN, a real image is first fed into a CNN where a predicted representation of the image is outputted. The error between the predicted and expected output would be back propagated to adjust the weights and biases through the layers of neurons. After the CNN is trained, it will be connected to a classifier where entropy based loss would be used to predict whether an image is AI-generated or real. This approach allows for zero-shot generalization, meaning the system can detect new AI-generated images without explicit training on synthetic data.
+
+
 
 \section{Baseline Model}
 \label{baseline}
