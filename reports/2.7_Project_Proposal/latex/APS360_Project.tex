@@ -73,22 +73,22 @@ WRITE ABSTRACT HERE
 % We decided not to use the term deep fake, right?
 % We need citations for all our claims
 
-The emergence of realistic AI image generation presents a significant challenge in the current digital landscape. This technology has evolved from simple image modifications to sophisticated videos that can convincingly mimic real individuals. With tools like Generative Adversarial Networks (GANs) and Diffusion Models (DMs), even non-experts can now generate convincing synthetic media. These media are often imperceptible from authentic content, even to those with specialized knowledge, posing substantial risks to societal trust, personal safety, and information integrity.
+The emergence of realistic AI image generation presents a significant challenge in the current digital landscape. This technology has evolved from simple image modifications to sophisticated videos that can convincingly mimic real individuals \citep{cnn2025}. With tools like Generative Adversarial Networks (GANs) and Diffusion Models (DMs), even non-experts can now generate convincing synthetic media. These media are often imperceptible from authentic content, even to those with specialized knowledge, posing substantial risks to societal trust, personal safety, and information integrity \citep{epstein2023generative}.
 
 % Suggestion (Nathan):
 % The emergence of realistic AI image generation presents a significant challenge in the current digital landscape. This technology has evolved from simple image modifications to sophisticated videos that can convincingly mimic real individuals. With tools like Generative Adversarial Networks (GANs) and Diffusion Models (DMs), even non-experts can now generate convincing synthetic media. These media are often imperceptible from authentic content, even to those with specialized knowledge, posing substantial risks to societal trust, personal safety, and information integrity. CITE ALL CLAIMS
 
 \subsection{Motivation}
 % Comment (Nathan): Cite, don't use "deep fake"
-The rising prevalence of AI image genertation presents serious threats to society. It has been used to spread misinformation, sway political debates, and jeopardize individual reputations. Facilitating dishonest behaviors, ranging from impersonating executives for monetary scams to inflicting considerable psychological damage on victims of non-consensual deep fake pornography. AI generative images blur the line between art made by humans and that produced by AI, challenging traditional concepts of authorship and artistic authenticity. Thus, presenting significant dangers to societal trust, individual safety, and the integrity of information.
+The rising prevalence of AI image generation applications present significant dangers to societal trust, individual safety, and the integrity of information. AI-based fake image generation has been used to spread misinformation, sway political debates, and jeopardize individual reputations\citep{chesney2019}. Facilitating dishonest behaviors- ranging from impersonating executives for monetary scams to inflicting considerable psychological damage on victims of non-consensual deep fake pornography \citep{TheGuardian2023}. It is also responsible for blurring the line between art made by humans and that produced by AI, challenging traditional concepts of authorship and artistic authenticity\citep{Dipascalido2023}. Hence, the need for a model to combat such issues.
 
 \subsection{Goal}
-The main aim of this project is to create a reliable model based on deep learning that can identify deep fake material. While this discussion emphasizes image-based images, the approach can be extended to video evaluation. 
+The main aim of this project is to create a reliable model based on deep learning that can identify generative AI images. While this discussion emphasizes AI-based images, the approach can be extended to video evaluation. 
 This method aims to distinguish genuine real images from artificial ones with great precision, thereby aiding the larger initiative against digital misinformation. 
 
 \subsection{Significance}
 % Comment (Nathan): This feels like it's the same thing as the Motivation, just with different examples
-The significance of this project is rooted in its possible uses across different fields, such as journalism, social media networks, and cybersecurity. With the rising accessibility of 'deep fake' creation tools, the potential for their misuse increases. Creating efficient detection systems is vital not only for spotting counterfeit content, but also for rebuilding public trust in digital media, thereby reducing misinformation. News agencies can employ detection tools to confirm the authenticity of content, whereas social media sites can utilize them to identify or eliminate altered content. Legal experts can utilize these tools for forensic inquiries, while cybersecurity frameworks can incorporate them to combat biometric spoofing threats.
+The significance of this project is rooted in its possible uses across different fields, such as journalism, social media networks, and cybersecurity. With the rising accessibility of `deep fake' creation tools, the potential for their misuse increases. Creating efficient detection systems is vital not only for spotting counterfeit content, but also for rebuilding public trust in digital media. News agencies can employ detection tools to confirm the authenticity of content\citep{Kumarage2023}, whereas social media sites can utilize them to identify or eliminate altered content\citep{cloudflare2023}. Legal experts can utilize these tools for forensic inquiries\citep{cai2023}, while cybersecurity frameworks can incorporate them to combat biometric spoofing threats\citep{techbullion2023}.
 
 \subsection{Justification for Employing Deep Learning}
 % Comment (Nathan):
@@ -96,7 +96,7 @@ The significance of this project is rooted in its possible uses across different
 % AI conflict?
 % We say later that CNNs don't work all too well. You say that detection systems need to utilize recent developments to anticipate new threats -- (a) what does this mean?, (b) the point of doing zero-shot is that we don't have to continually adapt to new generative models coming out
 % You talk about transfer learning but we aren't using that
-The aim is to fight the AI war with AI. Deep learning is highly effective for the purpose of detecting AI generative images. Conventional detection techniques depend on manually crafted features, which frequently do not manage to grasp the subtle and complex artifacts created during AI-based image generation production. Thus, detection systems need to be flexible, utilizing the most recent developments in technology to anticipate new threats, thereby implying the application of Deep Learning techniques, sustaining their efficacy over time. Deep Learning methods (such as transfer learning) can be employed improving efficacy by utilizing pre-trained models on extensive datasets, minimizing the requirement for significant computational resources and training duration. Thus justifying the use of AI.
+The aim is to fight the AI war with AI. Deep learning is highly effective for the purpose of detecting AI-based generative images because conventional detection techniques depend solely on manually crafted features, which frequently do not manage to grasp the subtle and complex artifacts created during the image generation production. Therefore, detection systems need to be flexible, utilizing the most recent developments in technology to anticipate new threats, implying the application of Deep Learning techniques to sustain the efficacy of detection systems over time\citep{ledig2017}. Deep Learning methods (such as transfer learning) can be employed improving efficacy by utilizing pre-trained models on extensive datasets, minimizing the requirement for significant computational resources and training duration\citep{srivastava2014}. Thus, justifying the use of AI.
 
 \section{Figure / Illustration}
 \label{illustration}
@@ -304,11 +304,11 @@ Table \ref{plan_table} shows our internal deadlines for various components of th
 \section{Risk Register}
 \label{risk}
 % no deep fake
-Creating a successful deep fake detection model involves various risks that may affect the project's outcome. This section highlights significant risks, evaluates their probability and effects, and presents detailed mitigation strategies backed by pertinent research and industry best practices.
+Creating a successful AI-based generative image detection model involves various risks that may affect the project's outcome. This section highlights significant risks, evaluates their probability and effects, and presents detailed mitigation strategies.
 
 \subsection{Insufficient Data Diversity}
 \textbf{Likelihood:} Moderate \\
-\textbf{Impact:} A lack of diverse training data can lead to a model that generalizes poorly to real-world scenarios, limiting its ability to detect deep fakes generated using different techniques or involving diverse demographics.
+\textbf{Impact:} A lack of diverse training data can lead to a model that generalizes poorly to real-world scenarios, limiting its ability to detect AI generated fake images using different techniques or involving diverse demographics.
 
 \textbf{Mitigation Strategies:}
 \begin{itemize}
@@ -324,7 +324,7 @@ Creating a successful deep fake detection model involves various risks that may 
 \begin{itemize}
     \item \textbf{Transfer Learning:} Utilize pre-trained models like EfficientNet to reduce training time while maintaining high performance \citep{tan2019}. ResNet-based architectures, such as SRResNet, can enhance image resolution for better deep fake detection \citep{ledig2017}.
     \item \textbf{Cloud-Based GPU Resources:} Leverage high-performance computing resources through platforms such as Google Colab Pro, AWS SageMaker, and Microsoft Azure to accelerate training processes.
-    %\item \textbf{Optimized Code Practices:} Implement efficient data loading pipelines, mixed-precision training, and parallel processing to enhance computational efficiency.
+    \item \textbf{Optimized Code Practices:} Implement efficient data loading pipelines (using Optimized Data Storage), mixed-precision training (for weights and activations), and parallel processing to enhance computational efficiency.
 \end{itemize}
 
 \subsection{Overfitting}
@@ -352,11 +352,11 @@ Creating a successful deep fake detection model involves various risks that may 
 
 \subsection{Model Underperformance}
 \textbf{Likelihood:} Moderate \\
-\textbf{Impact:} An underperforming model may fail to detect deep fakes with high accuracy, reducing the system's reliability.
+\textbf{Impact:} An underperforming model may fail to detect fake AI generated images from real ones with high accuracy, reducing the system's reliability.
 
 \textbf{Mitigation Strategies:}
 \begin{itemize}
-    \item \textbf{Architecture Refinement:} Experiment with different CNN architectures to optimize feature extraction from general images. Increase comlexity, number of layers, and number of parameters in our model.
+    \item \textbf{Architecture Refinement:} Experiment with different CNN architectures to optimize feature extraction from general images. Increase comlexity, number of layers, and number of parameters in the model.
     \item \textbf{Hyperparameter Tuning:} Use automated techniques like grid search, random search, or Bayesian optimization to fine-tune CNN parameters for optimal performance \citep{bergstra2011}.
 \end{itemize}
 
