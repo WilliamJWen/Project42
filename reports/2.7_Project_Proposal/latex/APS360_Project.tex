@@ -286,7 +286,7 @@ Creating a successful deep fake detection model involves various risks that may 
 
 \textbf{Mitigation Strategies:}
 \begin{itemize}
-    \item \textbf{Data Augmentation:} Apply geometric transformations (e.g., rotation, scaling, flipping), color adjustments (e.g., brightness, contrast), and noise injection to artificially increase dataset variability \cite{shorten2019}. This will help the model adapt to various alterations typical in AI-generated images.
+    \item \textbf{Data Augmentation:} Apply geometric transformations (e.g., rotation, scaling, flipping), color adjustments (e.g., brightness, contrast), and noise injection to artificially increase dataset variability \citep{shorten2019}. This will help the model adapt to various alterations typical in AI-generated images.
     \item \textbf{Multi-Dataset Integration:} Incorporate image datasets to capture a wide range of manipulation techniques and content types. Ensure all images are resized to 256x256 resolution for consistency across the training set.
     \item \textbf{Continuous Data Acquisition:} Regularly update the dataset with newly generated AI images from emerging technologies to ensure that the model stays current and can detect the latest deep fake techniques.
 \end{itemize}
@@ -297,7 +297,7 @@ Creating a successful deep fake detection model involves various risks that may 
 
 \textbf{Mitigation Strategies:}
 \begin{itemize}
-    \item \textbf{Transfer Learning:} Utilize pre-trained models like EfficientNet to reduce training time while maintaining high performance \cite{tan2019}. ResNet-based architectures, such as SRResNet, can enhance image resolution for better deep fake detection \cite{ledig2017}. Additionally, zero-shot super-resolution methods like OmniSSR offer flexible image upscaling without prior dataset training \cite{liu2020}.
+    \item \textbf{Transfer Learning:} Utilize pre-trained models like EfficientNet to reduce training time while maintaining high performance \citep{tan2019}. ResNet-based architectures, such as SRResNet, can enhance image resolution for better deep fake detection \citep{ledig2017}. Additionally, zero-shot super-resolution methods like OmniSSR offer flexible image upscaling without prior dataset training \citep{liu2020}.
     \item \textbf{Cloud-Based GPU Resources:} Leverage high-performance computing resources through platforms such as Google Colab Pro, AWS SageMaker, and Microsoft Azure to accelerate training processes.
     \item \textbf{Optimized Code Practices:} Implement efficient data loading pipelines, mixed-precision training, and parallel processing to enhance computational efficiency.
 \end{itemize}
@@ -308,7 +308,7 @@ Creating a successful deep fake detection model involves various risks that may 
 
 \textbf{Mitigation Strategies:}
 \begin{itemize}
-    \item \textbf{Regularization Techniques:} Apply dropout layers, L2 regularization, and batch normalization to prevent over-reliance on specific features \cite{srivastava2014}.
+    \item \textbf{Regularization Techniques:} Apply dropout layers, L2 regularization, and batch normalization to prevent over-reliance on specific features \citep{srivastava2014}.
     \item \textbf{Cross-Validation:} Use k-fold cross-validation to ensure the model’s robustness across different data splits, reducing the likelihood of overfitting to specific subsets.
     \item \textbf{Early Stopping:} Monitor validation loss during training and halt the process when performance plateaus or degrades, preventing unnecessary overfitting.
 \end{itemize}
@@ -332,7 +332,7 @@ Creating a successful deep fake detection model involves various risks that may 
 \textbf{Mitigation Strategies:}
 \begin{itemize}
     \item \textbf{Architecture Refinement:} Experiment with different CNN architectures to optimize feature extraction from general images. Zero-shot learning methods can also help the model generalize to various AI-generated manipulations without requiring extensive labeled data.
-    \item \textbf{Hyperparameter Tuning:} Use automated techniques like grid search, random search, or Bayesian optimization to fine-tune CNN parameters for optimal performance \cite{bergstra2011}.
+    \item \textbf{Hyperparameter Tuning:} Use automated techniques like grid search, random search, or Bayesian optimization to fine-tune CNN parameters for optimal performance \citep{bergstra2011}.
     \item \textbf{Enhanced Preprocessing:} Refine preprocessing steps, such as image normalization, noise reduction, and artifact detection, to ensure high-quality, consistent input data for training.
 \end{itemize}
 
