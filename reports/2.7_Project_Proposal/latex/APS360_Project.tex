@@ -92,6 +92,7 @@ Our proposed model follows a two-step training process, with the first stage exc
 \subsection{Step 1: Real Image Compression and Reconstruction}
 % Comments (Nathan):
 % The model doesn't learn to downscale the images, I think this is just done through average pooling
+% Use \ref{}s to reference your figure
 The first step involves training an image compression and reconstruction model solely on real images. The model learns to effectively downscale and reconstruct high-resolution images using convolutional layers (CNN) and pooling operations. Specifically:
 \begin{itemize}
     \item Real high-resolution images are downscaled through pooling layers and passed through multiple CNN layers.
