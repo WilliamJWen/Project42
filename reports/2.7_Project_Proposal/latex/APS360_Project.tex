@@ -154,7 +154,11 @@ This method was able to achieve an accuracy of 90\%, better than many other SoTA
 
 \section{Data Processing}
 \label{data}
-In this project, three datasets are required: a training set, a testing set, and a validation set. As will be discussed in the following section, the Zero-Shot Entropy Detector (ZED) architecture is designed to be trained exclusively on real images, eliminating the need for synthetic data during training. To ensure that the model is generalizable to realworld data, and to avoid any issues like poor accuracy and overfitting, it is crucial to process training data so that all biases in the images are eliminated. The most impactful bias identified is the semantic content of images.
+In this project, three datasets are required: a training set, a testing set, and a validation set. As will be discussed in the following section, the Zero-Shot Entropy Detector (ZED) architecture is designed to be trained exclusively on real images, eliminating the need for synthetic data during training. To ensure that the model is generalizable to real-world data, and to avoid any issues like poor accuracy and overfitting, it is crucial to process training data so that all biases in the images are eliminated. The most impactful bias identified is the semantic content of images.
+
+% Suggestion (Nathan):
+% Our model involves two phases of training (see \ref{arch}). As such, we require five datasets: two training sets, two validation sets, and one testing set. The first phase is trained only on real images, meaning that one training set and one validation set will be comprised only of real images. For the other training and validation sets, it is crucial to process data in order to minimize bias. We have identified the most potentially impactful bias in our data as being the semantic content of images.
+
 \subsection{Data Collection}
 To guarantee that the model is exposed to a diverse range of semantics, we will utilize two well-established camera-based digital forensics datasets: 1. RAISE: A Raw Images Dataset For Digital Image Forensics; 2.The ‘Dresden Image Database’ For Benchmarking Digital Image Forensics. These datasets collectively contain approximately 22,000 real images, captured under varying conditions and environments. The model will be trained in two phases which will be mentioned in detail later. For the first phase, 10,000 real images will be allocated for training and 2,000 real images for validation. For the second phase, 5,000 real images will be allocated for training and 1,000 images for validation. The remaining 2,000 real images will be reserved for evaluation in the testing phase. For the second phase, 5,000 synthetic images will also be used to training and 1,000 for validation which enables the model to develop a robust entropy-based understanding of real-world image statistics.
 The testing dataset will be balanced, comprising 2,000 real images and 2,000 AI-generated images. The synthetic images will be sourced from the SyntheticEye AI-Generated Image Dataset [SyntheticEye Reference], which includes images produced by a range of state-of-the-art generative models, including Stable Diffusion, DALL·E, and others. Incorporating AI-generated images from multiple sources ensures that the testing conditions closely reflect real-world inputs, enhancing the model’s ability to generalize across diverse synthetic image distributions.
@@ -173,17 +177,24 @@ The Zero-Shot Entropy Detector(ZED) is unique in a way that its training process
 % entropy and nll based, so maybe it's image statistic based?
 % we did used ai images in the second step training
 % I think we need to mention nll entropy is enough to detemine if a image is ai generated from the zed paper
+% Nathan:
+% instead of entropy-based i think we can say loss-based, since we might pick slightly different decision stats. also it might not be clear what entropy is
 \subsection{Architecture}
 The architecture of our neural network consists of two phases: CNN training and entropy based classification. In the CNN, a real image is first fed into a CNN where a predicted representation of the image is outputted. The error between the predicted and expected output would be back propagated to adjust the weights and biases through the layers of neurons. After the CNN is trained, it will be connected to a classifier where entropy based loss would be used to predict whether an image is AI-generated or real. This approach allows for zero-shot generalization, meaning the system can detect new AI-generated images without explicit training on synthetic data.
 
+% Suggested revision (Nathan):
+% Training the architecture of our neural network consists of two phases: (1) CNN training and (2) loss-based classification. Before stage (1), we will create downsized versions of all images, real and generated, through 2×2 average pooling.
 
+%In stage (1), the downsized versions of real images are given to a CNN as inputs. The CNN will upscale these images and predict their original full-sized versions. The error between the predicted and expected output will be used to adjust the weights and biases of the CNN's filters through backpropagation. This stage is zero-shot, meaning it will not require retraining on synthetic data upon the advent of new image-generating AI models.
+
+% In stage (2), we no longer train the CNN, and it will provide a good model for upscaling real images, but not AI-generated ones. In this stage, we will give the CNN both real and generated images. We will calculate loss statistics on its output, and use these statistics as the input to a classifier. This approach allows for zero-shot generalization, meaning the system can detect new AI-generated images without explicit training on synthetic data.
 
 \section{Baseline Model}
 \label{baseline}
 % resnet is too complicate for baseline model
 
 % I will revise after reading the data processing section to give more specific numbers for dataset sizes
-Our baseline model will mirror \citet{wang2020cnngeneratedimagessurprisinglyeasy}, an early attempt at AI-generated image detection. This model uses ResNet-50 trained on real images from ImageNet and fake images generated by three GAN architecures. We will expand our dataset to include fake images from a greater variety of image generators, including diffusion models (see \ref{data}). For simplicity, we will use a CNN but not ResNet. Like \citet{wang2020cnngeneratedimagessurprisinglyeasy}, the classifier will use a binary cross-entropy loss function.
+Our baseline model will mirror \citet{wang2020cnngeneratedimagessurprisinglyeasy}, an early attempt at AI-generated image detection. This model uses ResNet-50 trained on real images from ImageNet and fake images generated by three GAN architecures. We will expand our dataset to include fake images from a greater variety of image generators, including diffusion models (see \ref{data}). For simplicity, we will use a CNN but \textit{not} ResNet. Like \citet{wang2020cnngeneratedimagessurprisinglyeasy}, the classifier will use a binary cross-entropy loss function.
 
 \section{Ethical Considerations}
 \label{ethical}
