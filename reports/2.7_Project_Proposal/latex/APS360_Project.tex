@@ -69,8 +69,20 @@ WRITE ABSTRACT HERE
 
 \section{Introduction}
 \label{intro}
+The emergence of deep fake technology presents a significant challenge in the current digital landscape. Deep fakes have evolved from simple image modifications to sophisticated videos that can convincingly mimic actual individuals. With tools like Generative Adversarial Networks (GANs) and Autoencoders, even non-experts can now generate convincing synthetic media. These modifications are often imperceptible from authentic content to those without specialized knowledge, posing substantial risks to societal trust, personal safety, and information integrity.
 
-Introduction here
+\subsection{Motivation}
+The rising prevalence of deep fakes presents serious threats to society. They have been used to spread misinformation, sway political debates, and jeopardize individual reputations. They have facilitated dishonest behaviors, ranging from impersonating executives for monetary scams to inflicting considerable psychological damage on victims of non-consensual deep fake pornography. Moreover, deep fakes blur the line between art made by humans and that produced by AI, challenging traditional concepts of authorship and artistic authenticity, presenting significant dangers to societal trust, individual safety, and the integrity of information.
+
+\subsection{Goal}
+The main aim of this project is to create a dependable model based on deep learning that can identify deep fake material. While this discussion emphasizes image-based deep fakes, the approach can be extended to video evaluation. 
+This method aims to distinguish genuine real images from artificial ones with great precision, thereby aiding the larger initiative against digital misinformation. 
+
+\subsection{Significance}
+The significance of this project is rooted in its possible uses across different fields, such as journalism, social media networks, and cybersecurity. With the rising accessibility of deep fake creation tools, the potential for their misuse increases. Creating efficient detection systems is vital not only for spotting counterfeit content but also for rebuilding public trust in digital media, thereby reducing misinformation. News agencies can employ detection tools to confirm the authenticity of content, whereas social media sites can utilize them to identify or eliminate altered content. Legal experts can utilize these tools for forensic inquiries, while cybersecurity frameworks can incorporate them to combat biometric spoofing threats.
+
+\subsection{Justification for Employing Deep Learning}
+The goal is to combat the AI conflict using AI. Deep learning, especially CNNs, is highly effective for the purpose of detecting deep fakes. Conventional detection techniques depend on manually crafted features, which frequently do not manage to grasp the subtle and complex artifacts created during deep fake production. Thus, detection systems need to be flexible, utilizing the most recent developments in machine learning to anticipate new threats—implying the application of Deep Learning techniques  sustaining their efficacy over time. Deep Learning methods (such as transfer learning) can be employed to improve model efficacy by utilizing pre-trained models on extensive datasets, minimizing the requirement for significant computational resources and training duration.
 
 \section{Figure / Illustration}
 \label{illustration}
@@ -255,8 +267,63 @@ Table \ref{plan_table} shows our internal deadlines for various components of th
 
 \section{Risk Register}
 \label{risk}
+Creating a successful deep fake detection model involves various risks that may affect the project's outcome. This section highlights significant risks, evaluates their probability and effects, and presents detailed mitigation strategies backed by pertinent research and industry best practices.
 
-Risk register here
+\subsection{Insufficient Data Diversity}
+\textbf{Likelihood:} Moderate \\
+\textbf{Impact:} A lack of diverse training data can lead to a model that generalizes poorly to real-world scenarios, limiting its ability to detect deep fakes generated using different techniques or involving diverse demographics.
+
+\textbf{Mitigation Strategies:}
+\begin{itemize}
+    \item \textbf{Data Augmentation:} Apply geometric transformations (e.g., rotation, scaling, flipping), color adjustments (e.g., brightness, contrast), and noise injection to artificially increase dataset variability \cite{shorten2019}. This will help the model adapt to various alterations typical in AI-generated images.
+    \item \textbf{Multi-Dataset Integration:} Incorporate image datasets to capture a wide range of manipulation techniques and content types. Ensure all images are resized to 256x256 resolution for consistency across the training set.
+    \item \textbf{Continuous Data Acquisition:} Regularly update the dataset with newly generated AI images from emerging technologies to ensure that the model stays current and can detect the latest deep fake techniques.
+\end{itemize}
+
+\subsection{Prolonged Training Time}
+\textbf{Likelihood:} High \\
+\textbf{Impact:} Extended training times can delay project milestones, reduce iteration speed, and limit experimentation with different model architectures.
+
+\textbf{Mitigation Strategies:}
+\begin{itemize}
+    \item \textbf{Transfer Learning:} Utilize pre-trained models like EfficientNet to reduce training time while maintaining high performance \cite{tan2019}. ResNet-based architectures, such as SRResNet, can enhance image resolution for better deep fake detection \cite{ledig2017}. Additionally, zero-shot super-resolution methods like OmniSSR offer flexible image upscaling without prior dataset training \cite{liu2020}.
+    \item \textbf{Cloud-Based GPU Resources:} Leverage high-performance computing resources through platforms such as Google Colab Pro, AWS SageMaker, and Microsoft Azure to accelerate training processes.
+    \item \textbf{Optimized Code Practices:} Implement efficient data loading pipelines, mixed-precision training, and parallel processing to enhance computational efficiency.
+\end{itemize}
+
+\subsection{Overfitting}
+\textbf{Likelihood:} Moderate \\
+\textbf{Impact:} Overfitting results in a model that performs well on training data but poorly on unseen data, compromising its real-world effectiveness.
+
+\textbf{Mitigation Strategies:}
+\begin{itemize}
+    \item \textbf{Regularization Techniques:} Apply dropout layers, L2 regularization, and batch normalization to prevent over-reliance on specific features \cite{srivastava2014}.
+    \item \textbf{Cross-Validation:} Use k-fold cross-validation to ensure the model’s robustness across different data splits, reducing the likelihood of overfitting to specific subsets.
+    \item \textbf{Early Stopping:} Monitor validation loss during training and halt the process when performance plateaus or degrades, preventing unnecessary overfitting.
+\end{itemize}
+
+\subsection{Technical Skill Gaps}
+\textbf{Likelihood:} Moderate \\
+\textbf{Impact:} Knowledge gaps in specific areas (e.g., advanced machine learning techniques, cloud computing) can slow down development and affect model performance.
+
+\textbf{Mitigation Strategies:}
+\begin{itemize}
+    \item \textbf{Skill Development:} Leverage online courses (e.g., Coursera) and organize group study sessions to address specific knowledge gaps.
+    \item \textbf{Mentorship:} Seek advice from professors, TAs, or online platforms like Stack Overflow and GitHub for problem-solving support.
+    \item \textbf{Task Allocation:} Distribute tasks based on each team member’s strengths to optimize efficiency and project quality.
+    \item \textbf{Scoping:} If knowledge gaps are too large, refine the project scope to align with the team’s current skill level, ensuring the project remains achievable within the timeline.
+\end{itemize}
+
+\subsection{Model Underperformance}
+\textbf{Likelihood:} Moderate \\
+\textbf{Impact:} An underperforming model may fail to detect deep fakes with high accuracy, reducing the system’s reliability.
+
+\textbf{Mitigation Strategies:}
+\begin{itemize}
+    \item \textbf{Architecture Refinement:} Experiment with different CNN architectures to optimize feature extraction from general images. Zero-shot learning methods can also help the model generalize to various AI-generated manipulations without requiring extensive labeled data.
+    \item \textbf{Hyperparameter Tuning:} Use automated techniques like grid search, random search, or Bayesian optimization to fine-tune CNN parameters for optimal performance \cite{bergstra2011}.
+    \item \textbf{Enhanced Preprocessing:} Refine preprocessing steps, such as image normalization, noise reduction, and artifact detection, to ensure high-quality, consistent input data for training.
+\end{itemize}
 
 \section{Link to GitHub}
 The project's GitHub repository can be accessed at:  
