@@ -157,7 +157,7 @@ In 2021, BtS achieved approxiately 90\% accuracy on its testing datasets and was
 
 \subsection{Contrastive Language–Image Pretraining}
 
-Another architecture that has been explored for detecting AI-generated images is Contrastive Language–Image Pretraining (CLIP), which was developed by OpenAI in 2021 \citep{radford2021learningtransferablevisualmodels}. This model is trained on pairs of images and text, and in the context of AI-generated image detection, this text might either be their prompts or human-written descriptions. CLIP was used to achieve an accuracy of 95-100\% accuracy, making it a promising model for AI-generated image detection \citep{moskowitz2024detectingaigeneratedimagesclip}.
+Another architecture that has been explored for detecting AI-generated images is Contrastive Language–Image Pretraining (CLIP), which was developed by OpenAI in 2021 \citep{radford2021learningtransferablevisualmodels}. This model is trained on pairs of images and text, and in the context of AI-generated image detection, this text might either be their prompts or human-written descriptions. CLIP was used to achieve an accuracy of 95-100\%, making it a promising model for AI-generated image detection \citep{moskowitz2024detectingaigeneratedimagesclip}.
 
 \subsection{Vision Transformers}
 
@@ -166,16 +166,13 @@ In natural language processing, text is interpreted as a sequence of tokens from
 \subsection{Zero-Shot Entropy-Based Detector}
 \label{ZED}
 
-The main issue in designing AI-generated image detectors is that image synthesis models are constantly evolving to circumvent detectors trained on old data. In September 2024, a new zero-shot method was devised which initally only trains on real images \citep{cozzolino2024zeroshotdetectionaigeneratedimages}. First, a CNN is trained to predict real images from encoded versions of those images. Next, the CNN is used to predict both real and fake images from their encoded versions, and loss statistics are fed into a classifier. Higher loss generally corresponds to AI-generated images, since the CNN provides a good model for real images.
+The main issue in designing AI-generated image detectors is that image synthesis models are constantly evolving to circumvent detectors trained on old data. In September 2024, a new zero-shot method was devised which initally only trains on real images \citep{cozzolino2024zeroshotdetectionaigeneratedimages}. First, a CNN is trained to predict real images from encoded versions of those images. Next, the CNN is used to predict both real and fake images from their encoded versions, and loss statistics used to differentiate real images from synthetic ones. Higher loss generally corresponds to AI-generated images, since the CNN provides a good model for real images.
 
 This method was able to achieve an accuracy of 90\%, better than many other SoTA models. However, one drawback is that training and testing datasets were comprised only of uncompressed images.
 
 \section{Data Processing}
 \label{data}
-In this project, three datasets are required: a training set, a testing set, and a validation set. As will be discussed in the following section, the Zero-Shot Entropy Detector (ZED) architecture is designed to be trained exclusively on real images, eliminating the need for synthetic data during training. To ensure that the model is generalizable to real-world data, and to avoid any issues like poor accuracy and overfitting, it is crucial to process training data so that all biases in the images are eliminated. The most impactful bias identified is the semantic content of images.
-
-% Suggestion (Nathan):
-% Our model involves two phases of training (see \ref{arch}). As such, we require five datasets: two training sets, two validation sets, and one testing set. The first phase is trained only on real images, meaning that one training set and one validation set will be comprised only of real images. For the other training and validation sets, it is crucial to process data in order to minimize bias. We have identified the most potentially impactful bias in our data as being the semantic content of images.
+Our model involves two phases of training (see \ref{arch}). As such, we require five datasets: two training sets, two validation sets, and one testing set. The first phase is trained only on real images, meaning that one training set and one validation set will be comprised only of real images. For the other training and validation sets, it is crucial to process data in order to minimize bias. We have identified the most potentially impactful bias in our data as being the semantic content of the images.
 
 \subsection{Data Collection}
 % Suggestions (Nathan):
@@ -183,7 +180,7 @@ In this project, three datasets are required: a training set, a testing set, and
 % "mentioned in detail later": reference the section
 % Split into more paragraphs -> easier to read
 % Create a table showing this information (sources, amounts, etc.) -> hard to keep track of numbers in sentences like this
-To guarantee that the model is exposed to a diverse range of semantics, we will utilize two well-established camera-based digital forensics datasets: 1. RAISE: A Raw Images Dataset For Digital Image Forensics; 2.The ‘Dresden Image Database’ For Benchmarking Digital Image Forensics. These datasets collectively contain approximately 22,000 real images, captured under varying conditions and environments. The model will be trained in two phases which will be mentioned in detail later. For the first phase, 10,000 real images will be allocated for training and 2,000 real images for validation. For the second phase, 5,000 real images will be allocated for training and 1,000 images for validation. The remaining 2,000 real images will be reserved for evaluation in the testing phase. For the second phase, 5,000 synthetic images will also be used to training and 1,000 for validation which enables the model to develop a robust entropy-based understanding of real-world image statistics.
+To guarantee that the model is exposed to a diverse range of semantics, we will utilize two well-established camera-based digital forensics datasets: 1. RAISE: A Raw Images Dataset For Digital Image Forensics; 2.The 'Dresden Image Database' For Benchmarking Digital Image Forensics. These datasets collectively contain approximately 22,000 real images, captured under varying conditions and environments. The model will be trained in two phases which will be mentioned in detail later. For the first phase, 10,000 real images will be allocated for training and 2,000 real images for validation. For the second phase, 5,000 real images will be allocated for training and 1,000 images for validation. The remaining 2,000 real images will be reserved for evaluation in the testing phase. For the second phase, 5,000 synthetic images will also be used to training and 1,000 for validation which enables the model to develop a robust entropy-based understanding of real-world image statistics.
 The testing dataset will be balanced, comprising 2,000 real images and 2,000 AI-generated images. The synthetic images will be sourced from the SyntheticEye AI-Generated Image Dataset [SyntheticEye Reference], which includes images produced by a range of state-of-the-art generative models, including Stable Diffusion, DALL·E, and others. Incorporating AI-generated images from multiple sources ensures that the testing conditions closely reflect real-world inputs, enhancing the model's ability to generalize across diverse synthetic image distributions.
 
 \subsection{Data Modification}
@@ -201,7 +198,7 @@ Nowadays, image classification models typically use Convolutional Neural Network
 
 % Nathan:
 % We shouldn't use the name "Zero-Shot Entropy Detector". that is the name of the project from the paper and we shouldn't copy that I don't think. We can just talk about (a) zero-shot method(s). Also, only the first stage is zero-shot, just to be clear
-The Zero-Shot Entropy Detector (ZED) is unique in a way that its training process for detecting AI-generated images doesn't rely on synthetic data sets. The main idea behind ZED is to estimate how ``surprising'' an image is compared to the real images it trained on. It is assumed that real images follow a ``natural'' statistic pattern, while AI-generated images typically consists of “unnatural” statistical patterns that are detectable \citep{cozzolino2024zeroshotdetectionaigeneratedimages}.
+The Zero-Shot Entropy Detector (ZED) is unique in a way that its training process for detecting AI-generated images doesn't rely on synthetic data sets. The main idea behind ZED is to estimate how ``surprising'' an image is compared to the real images it trained on. It is assumed that real images follow a ``natural'' statistic pattern, while AI-generated images typically consists of ``unnatural'' statistical patterns that are detectable \citep{cozzolino2024zeroshotdetectionaigeneratedimages}.
 
 % entropy and nll based, so maybe it's image statistic based?
 % we did used ai images in the second step training
@@ -213,18 +210,17 @@ The Zero-Shot Entropy Detector (ZED) is unique in a way that its training proces
 The architecture of our neural network consists of two phases: CNN training and entropy based classification. In the CNN, a real image is first fed into a CNN where a predicted representation of the image is outputted. The error between the predicted and expected output would be back propagated to adjust the weights and biases through the layers of neurons. After the CNN is trained, it will be connected to a classifier where entropy based loss would be used to predict whether an image is AI-generated or real. This approach allows for zero-shot generalization, meaning the system can detect new AI-generated images without explicit training on synthetic data.
 
 % Suggested revision (Nathan):
-% Training the architecture of our neural network consists of two phases: (1) CNN training and (2) loss-based classification. Before stage (1), we will create downsized versions of all images, real and generated, through 2×2 average pooling.
+% Training the architecture of our neural network consists of two phases: (1) CNN training and (2) loss-based classification.
 
-%In stage (1), the downsized versions of real images are given to a CNN as inputs. The CNN will upscale these images and predict their original full-sized versions. The error between the predicted and expected output will be used to adjust the weights and biases of the CNN's filters through backpropagation. This stage is zero-shot, meaning it will not require retraining on synthetic data upon the advent of new image-generating AI models.
+% In stage (1), WILLIAM ADD HERE the downsized versions of real images are given to a CNN as inputs. The CNN will upscale these images and predict their original full-sized versions. The error between the predicted and expected output will be used to adjust the weights and biases of the CNN's filters through backpropagation. This stage is zero-shot, meaning it will not require retraining on synthetic data upon the advent of new image-generating AI models.
 
-% In stage (2), we no longer train the CNN, and it will provide a good model for upscaling real images, but not AI-generated ones. In this stage, we will give the CNN both real and generated images. We will calculate loss statistics on its output, and use these statistics as the input to a classifier. This approach allows for zero-shot generalization, meaning the system can detect new AI-generated images without explicit training on synthetic data.
+% In stage (2), we no longer train the CNN, and it will provide a good model for upscaling real images, but not AI-generated ones. In this stage, we will give the CNN both real and generated images. We will calculate loss statistics on its output, and use these statistics as the input to a classifier. SOME CONCLUSION HERE
 
 \section{Baseline Model}
 \label{baseline}
-% resnet is too complicate for baseline model
 
-% I will revise after reading the data processing section to give more specific numbers for dataset sizes
 Our baseline model will mirror \citet{wang2020cnngeneratedimagessurprisinglyeasy}, an early attempt at AI-generated image detection. This model uses ResNet-50 trained on real images from ImageNet and fake images generated by three GAN architecures. We will expand our dataset to include fake images from a greater variety of image generators, including diffusion models (see \ref{data}). For simplicity, we will use a CNN but \textit{not} ResNet. Like \citet{wang2020cnngeneratedimagessurprisinglyeasy}, the classifier will use a binary cross-entropy loss function.
+% EXPAND, MORE DETAIL
 
 \section{Ethical Considerations}
 \label{ethical}
@@ -237,8 +233,6 @@ To minimize these risks, we ensure that our dataset is obtained from \textbf{pee
 
 \subsection{Misuse and Limitations}
 The use of AI-generated image detectors also poses risks related to model accuracy and potential misuse. Due to the inherent uncertainty in AI models, achieving \textbf{perfect reliability} in distinguishing real and AI-generated images is generally infeasible, regardless of how well the model performs during testing. As a result, there is always a possibility of \textbf{false accusations}, where real images are mistakenly classified as AI-generated. The consequences of such misclassifications against legitimate artists can be severe and, in some case, irreversible. To mitigate this, we will explicitly \textbf{disclaim that the model is not 100\% accurate} and should be \textbf{used with caution}. It is meant to assist rather than serve as final proof in any legal or professional decisions.
-
-Furthermore, there are concerns that our AI-generated image detecter could be misused to \textbf{discourage creative applications of AI}. To prevent this, we will establish \textbf{clear legal and ethical guidelines} restricting the model’s use to detecting harmful content. The system \textbf{cannot be used for unauthorized purposes} without \textbf{explicit author approval and oversight from proper regulatory bodies}.
 
 By taking these measures, we aim to ensure that our AI tool is ethically sound, responsibly deployed, and used within appropriate legal boundaries.
 
@@ -253,7 +247,7 @@ To ensure team cohesion and clear delineation of tasks, we will (a) assign speci
 \subsection{Assigning Work}
 \label{assigning_work}
 
-For written deliverables, we will all brainstorm ideas and points for each section. However, to ensure that we do not overwrite each other's work, each team member will be responsible for drafting certain sections. The point total of one member's assigned sections should be similar to the totals of every other team member's assigned sections to ensure equal work. We will use Git for version control so that we can clearly see the contributions of each team member. Using LaTeX comments, our group chat, and verbal communication, we will notify each other of suggestions that we have for each other's work.
+For written deliverables, we will all brainstorm ideas for each section. However, to ensure that we do not overwrite each other's work, each team member will be responsible for drafting certain sections. The point total of one member's assigned sections should be similar to the totals of every other team member's assigned sections to ensure equal work. We will use Git for version control so that we can clearly see the contributions of each team member. Using LaTeX comments, our group chat, and verbal communication, we will notify each other of suggestions that we have for each other's work.
 
 Regarding work on the project itself, we will equally delineate ``substantial tasks'' as described in the Project Final Report Handout and Rubric CITE (see \ref{detailed_plan}). This we will ensure that we are not overwriting each other's work and that we each share an equal load of the total work. Like with written deliverables, we will use comments, our group chat, and verbal communication to share suggestions for each other's work.
 
@@ -309,6 +303,7 @@ Table \ref{plan_table} shows our internal deadlines for various components of th
 
 \section{Risk Register}
 \label{risk}
+% no deep fake
 Creating a successful deep fake detection model involves various risks that may affect the project's outcome. This section highlights significant risks, evaluates their probability and effects, and presents detailed mitigation strategies backed by pertinent research and industry best practices.
 
 \subsection{Insufficient Data Diversity}
@@ -318,7 +313,6 @@ Creating a successful deep fake detection model involves various risks that may 
 \textbf{Mitigation Strategies:}
 \begin{itemize}
     \item \textbf{Data Augmentation:} Apply geometric transformations (e.g., rotation, scaling, flipping), color adjustments (e.g., brightness, contrast), and noise injection to artificially increase dataset variability \citep{shorten2019}. This will help the model adapt to various alterations typical in AI-generated images.
-    \item \textbf{Multi-Dataset Integration:} Incorporate image datasets to capture a wide range of manipulation techniques and content types. Ensure all images are resized to 256x256 resolution for consistency across the training set.
     \item \textbf{Continuous Data Acquisition:} Regularly update the dataset with newly generated AI images from emerging technologies to ensure that the model stays current and can detect the latest deep fake techniques.
 \end{itemize}
 
@@ -328,9 +322,9 @@ Creating a successful deep fake detection model involves various risks that may 
 
 \textbf{Mitigation Strategies:}
 \begin{itemize}
-    \item \textbf{Transfer Learning:} Utilize pre-trained models like EfficientNet to reduce training time while maintaining high performance \citep{tan2019}. ResNet-based architectures, such as SRResNet, can enhance image resolution for better deep fake detection \citep{ledig2017}. Additionally, zero-shot super-resolution methods like OmniSSR offer flexible image upscaling without prior dataset training \citep{liu2020}.
+    \item \textbf{Transfer Learning:} Utilize pre-trained models like EfficientNet to reduce training time while maintaining high performance \citep{tan2019}. ResNet-based architectures, such as SRResNet, can enhance image resolution for better deep fake detection \citep{ledig2017}.
     \item \textbf{Cloud-Based GPU Resources:} Leverage high-performance computing resources through platforms such as Google Colab Pro, AWS SageMaker, and Microsoft Azure to accelerate training processes.
-    \item \textbf{Optimized Code Practices:} Implement efficient data loading pipelines, mixed-precision training, and parallel processing to enhance computational efficiency.
+    %\item \textbf{Optimized Code Practices:} Implement efficient data loading pipelines, mixed-precision training, and parallel processing to enhance computational efficiency.
 \end{itemize}
 
 \subsection{Overfitting}
@@ -340,8 +334,8 @@ Creating a successful deep fake detection model involves various risks that may 
 \textbf{Mitigation Strategies:}
 \begin{itemize}
     \item \textbf{Regularization Techniques:} Apply dropout layers, L2 regularization, and batch normalization to prevent over-reliance on specific features \citep{srivastava2014}.
-    \item \textbf{Cross-Validation:} Use k-fold cross-validation to ensure the model’s robustness across different data splits, reducing the likelihood of overfitting to specific subsets.
-    \item \textbf{Early Stopping:} Monitor validation loss during training and halt the process when performance plateaus or degrades, preventing unnecessary overfitting.
+    \item \textbf{Cross-Validation:} Use k-fold cross-validation to ensure the model's robustness across different data splits, reducing the likelihood of overfitting to specific subsets.
+    \item \textbf{Early Stopping:} Monitor validation loss during training and halt the process when performance plateaus or degrades, preventing unnecessary overfitting (stopping with patience).
 \end{itemize}
 
 \subsection{Technical Skill Gaps}
@@ -352,19 +346,18 @@ Creating a successful deep fake detection model involves various risks that may 
 \begin{itemize}
     \item \textbf{Skill Development:} Leverage online courses (e.g., Coursera) and organize group study sessions to address specific knowledge gaps.
     \item \textbf{Mentorship:} Seek advice from professors, TAs, or online platforms like Stack Overflow and GitHub for problem-solving support.
-    \item \textbf{Task Allocation:} Distribute tasks based on each team member’s strengths to optimize efficiency and project quality.
-    \item \textbf{Scoping:} If knowledge gaps are too large, refine the project scope to align with the team’s current skill level, ensuring the project remains achievable within the timeline.
+    \item \textbf{Task Allocation:} Distribute tasks based on each team member's strengths to optimize efficiency and project quality.
+    \item \textbf{Scoping:} If knowledge gaps are too large, refine the project scope to align with the team's current skill level, ensuring the project remains achievable within the timeline.
 \end{itemize}
 
 \subsection{Model Underperformance}
 \textbf{Likelihood:} Moderate \\
-\textbf{Impact:} An underperforming model may fail to detect deep fakes with high accuracy, reducing the system’s reliability.
+\textbf{Impact:} An underperforming model may fail to detect deep fakes with high accuracy, reducing the system's reliability.
 
 \textbf{Mitigation Strategies:}
 \begin{itemize}
-    \item \textbf{Architecture Refinement:} Experiment with different CNN architectures to optimize feature extraction from general images. Zero-shot learning methods can also help the model generalize to various AI-generated manipulations without requiring extensive labeled data.
+    \item \textbf{Architecture Refinement:} Experiment with different CNN architectures to optimize feature extraction from general images. Increase comlexity, number of layers, and number of parameters in our model.
     \item \textbf{Hyperparameter Tuning:} Use automated techniques like grid search, random search, or Bayesian optimization to fine-tune CNN parameters for optimal performance \citep{bergstra2011}.
-    \item \textbf{Enhanced Preprocessing:} Refine preprocessing steps, such as image normalization, noise reduction, and artifact detection, to ensure high-quality, consistent input data for training.
 \end{itemize}
 
 \section{Link to GitHub}
