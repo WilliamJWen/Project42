@@ -174,7 +174,18 @@ Our baseline model will mirror \citet{wang2020cnngeneratedimagessurprisinglyeasy
 \section{Ethical Considerations}
 \label{ethical}
 
-Ethical considerations here
+\subsection{Data Collection and Bias}
+The implementation of AI-generated image detectors raises several ethical concerns, particularly regarding data collection and privacy. If the dataset used to train the detector contains personal or sensitive images, there is a risk of violating individuals' privacy rights. Additionally, the dataset may be biased, detecting AI-generated images only from certain architectures or sharing certain feature while failing to generalize to others.
+
+To minimize these risks, we ensure that our dataset is obtained from \textbf{peer-reviewed papers and licensed Kaggle datasets}. Furthermore, we use \textbf{balanced, diverse, and multi-source datasets} to reduce bias and avoid over-reliance on any single source.
+
+\subsection{Misuse and Limitations}
+The use of AI-generated image detectors also poses risks related to model accuracy and potential misuse. Due to the inherent uncertainty in AI models, achieving \textbf{perfect reliability} in distinguishing real and AI-generated images is generally infeasible, regardless of how well the model performs during testing. As a result, there is always a possibility of \textbf{false accusations}, where real images are mistakenly classified as AI-generated. And the consequences of such misclassifications against legitimate artists can be severe and, in some case, irreversible. To mitigate this, we will explicitly \textbf{disclaim that the model is not 100\% accurate} and should be \textbf{used with caution}. It is meant to assist rather than serve as final proof in any legal or professional decisions.
+
+Furthermore, there are concerns that our AI-generated image detecter could be misused to \textbf{discourage creative applications of AI}. To prevent this, we will establish \textbf{clear legal and ethical guidelines} restricting the model’s use to detecting harmful content. The system \textbf{cannot be used for unauthorized purposes} without \textbf{explicit author approval and oversight from proper regulatory bodies}.
+
+By taking these measures, we aim to ensure that our AI tool is ethically sound, responsibly deployed, and used within appropriate legal boundaries.
+
 
 \section{Project Plan}
 \label{plan}
