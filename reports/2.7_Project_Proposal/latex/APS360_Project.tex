@@ -1,5 +1,6 @@
 \documentclass{article} % For LaTeX2e
 \usepackage{iclr2022_conference,times}
+\usepackage{graphicx}
 % Optional math commands from https://github.com/goodfeli/dlbook_notation.
 \input{math_commands.tex}
 
@@ -72,7 +73,33 @@ Introduction here
 \section{Figure / Illustration}
 \label{illustration}
 
-Illustration here
+Our proposed model follows a two-step training process, with the first stage exclusively trained on real images and the second stage incorporating both real and AI-generated images for classification.
+
+\subsection{Step 1: Real Image Compression and Reconstruction}
+The first step involves training an image compression and reconstruction model solely on real images. The model learns to effectively downscale and reconstruct high-resolution images using convolutional layers (CNN) and pooling operations. Specifically:
+\begin{itemize}
+    \item Real high-resolution images are downscaled through pooling layers and passed through multiple CNN layers.
+    \item The CNN extracts essential features and maps them to a latent space representation.
+    \item A fully connected layer then predicts the \textbf{weight, mean, and scale} parameters for a logistic probability distribution, which is used to reconstruct the original high-resolution image.
+    \item The objective of this step is to create a model capable of accurately compressing and decompressing real images while preserving their statistical properties.
+\end{itemize}
+
+\subsection{Step 2: Real vs. AI-Generated Image Classification}
+In the second step, the model is extended to classify images as real or AI-generated. This stage leverages both real and AI-generated datasets:
+\begin{itemize}
+    \item Input images, including both real and AI-generated high-resolution images, undergo the same compression and reconstruction process as in Step 1.
+    \item The previously trained model is applied \textbf{only to real images} to ensure learned representations align with natural image statistics.
+    \item Using the learned \textbf{mean, weight, and scale} parameters, the model computes entropy-based statistics such as \textbf{Negative Log-Likelihood (NLL) and entropy values} for each image.
+    \item These computed statistics are then passed through multiple fully connected layers to classify whether an image is real or AI-generated.
+\end{itemize}
+
+By structuring the model in this two-step process, we ensure that the first stage learns an accurate representation of natural image statistics, which the second stage leverages to effectively detect synthetic images.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{Fig/high_level_architecture.pdf}
+    \caption{Figure1. Two-step high level architecture for AI-generated image detection. Step 1 (top) trains a compression and reconstruction model (blue box) solely on real images, learning to restore downscaled high-resolution images using CNN layers and logistic probability distribution parameters. Step 2 (bottom) applies the trained model (blue box) to both real and AI-generated images, extracting entropy-based statistics such as Negative Log-Likelihood (NLL) and entropy values. These statistics are passed through multiple fully connected layers for final classification.}
+\end{figure}
 
 \section{Background \& Related Work}
 \label{background}
@@ -129,7 +156,9 @@ Nowadays, image classification models typically use Convolutional Neural Network
 
 The Zero-Shot Entropy Detector(ZED) is unique in a way that its training process for detecting AI-generated images doesn’t rely on synthetic data sets. The main idea behind ZED is to estimate how “surprising” an image is compared to the real images it trained on. It is assumed that real images follow a “natural” statistic pattern, while AI-generated images typically consists of “unnatural” statistical patterns that are detectable \citep{cozzolino2024zeroshotdetectionaigeneratedimages}.
 
-
+% entropy and nll based, so maybe it's image statistic based?
+% we did used ai images in the second step training
+% I think we need to mention nll entropy is enough to detemine if a image is ai generated from the zed paper
 \subsection{Architecture}
 The architecture of our neural network consists of two phases: CNN training and entropy based classification. In the CNN, a real image is first fed into a CNN where a predicted representation of the image is outputted. The error between the predicted and expected output would be back propagated to adjust the weights and biases through the layers of neurons. After the CNN is trained, it will be connected to a classifier where entropy based loss would be used to predict whether an image is AI-generated or real. This approach allows for zero-shot generalization, meaning the system can detect new AI-generated images without explicit training on synthetic data.
 
@@ -137,6 +166,7 @@ The architecture of our neural network consists of two phases: CNN training and 
 
 \section{Baseline Model}
 \label{baseline}
+% resnet is too complicate for baseline model
 
 % I will revise after reading the data processing section to give more specific numbers for dataset sizes
 Our baseline model will mirror \citet{wang2020cnngeneratedimagessurprisinglyeasy}, an early attempt at AI-generated image detection. This model uses ResNet-50 trained on real images from ImageNet and fake images generated by three GAN architecures. We will expand our dataset to include fake images from a greater variety of image generators, including diffusion models (see \ref{data}). For simplicity, we will use a CNN but not ResNet. Like \citet{wang2020cnngeneratedimagessurprisinglyeasy}, the classifier will use a binary cross-entropy loss function.
