@@ -186,42 +186,46 @@ The Zero-Shot Entropy Detector (ZED) is unique in a way that its training proces
 \subsection{Architecture}
 \label{sec:architecture}
 
+% Training the architecture of our neural network consists of two phases: (1) CNN training and (2) loss-based classification.
+Our proposed model follows a two-step training process: (1) CNN treaing and (2) loss-based classification.
 
-Our proposed model follows a two-step training process, with the first stage exclusively trained on real images and the second stage incorporating both real and AI-generated images for classification.
-
-\subsection{Step 1: Real Image Compression and Reconstruction}
+\subsubsection{Step 1: Real Image Compression and Reconstruction}
+% In stage (1), WILLIAM ADD HERE the downsized versions of real images are given to a CNN as inputs. The CNN will upscale these images and predict their original full-sized versions.  
 % Comments (Nathan):
 % The model doesn't learn to downscale the images, I think this is just done through average pooling
 % Use \ref{}s to reference your figure
-The first step involves training an image compression and reconstruction model solely on real images. The model learns to effectively downscale and reconstruct high-resolution images using convolutional layers (CNN) and pooling operations. Specifically:
+The first step, illustrated in \ref{fig:high-level-architecture}, involves training an image compression and reconstruction model \textbf{solely on real images}. The model downscale and learns to reconstruct high-resolution images using pooling operations and convolutional layers (CNN). Specifically:
 \begin{itemize}
-    \item Real high-resolution images are downscaled through pooling layers and passed through multiple CNN layers.
-    \item The CNN extracts essential features and maps them to a latent space representation.
-    \item A fully connected layer then predicts the \textbf{weight, mean, and scale} parameters for a logistic probability distribution, which is used to reconstruct the original high-resolution image.
-    \item The objective of this step is to create a model capable of accurately compressing and decompressing real images while preserving their statistical properties.
+    \item Real high-resolution images are downscaled through pooling layers and passed to a multi-layered CNN as inputs.
+    \item The CNN extracts essential features and maps them to a latent space representation and upscale these images, and conects to a fully connected layer.
+    \item The fully connected layer then predicts the \textbf{weight, mean, and scale} parameters for logistic probability distributions, which are used to reconstruct the original high-resolution image.
+    \item The error between the predicted and expected output will be used to adjust the weights and biases of the CNN's filters through backpropagation.
 \end{itemize}
 
-\subsection{Step 2: Real vs. AI-Generated Image Classification}
+This first stage is zero-shot, meaning it will not require retraining on synthetic data upon the advent of new image-generating AI models. And the CNN will be able to capture statistic features that only real images share. 
+
+\subsubsection{Step 2: Real vs. AI-Generated Image Classification}
 % Suggestion (Nathan):
-% For the "Image Statistics" box, maybe name it "Loss Statstics" and then have Entropy bubble, NLL, bubble, and then vertical ellipses underneath?
-In the second step, the model is extended to classify images as real or AI-generated. This stage leverages both real and AI-generated datasets:
+% In stage (2), we no longer train the CNN, and it will provide a good model for upscaling real images, but not AI-generated ones. In this stage, we will give the CNN both real and generated images. We will calculate loss statistics on its output, and use these statistics as the input to a classifier. SOME CONCLUSION HERE
+The second step, illustrated in \ref{fig:high-level-architecture}, the model is extended to classify images as real or AI-generated. This stage leverages both real and AI-generated datasets:
 \begin{itemize}
     \item Input images, including both real and AI-generated high-resolution images, undergo the same compression and reconstruction process as in Step 1.
-    \item The previously trained model is applied \textbf{only to real images} to ensure learned representations align with natural image statistics.
-    \item Using the learned \textbf{mean, weight, and scale} parameters, the model computes entropy-based statistics such as \textbf{Negative Log-Likelihood (NLL) and entropy values} for each image.
+    \item Using the obtained \textbf{mean, weight, and scale} parameters, the model computes loss statistics such as \textbf{Negative Log-Likelihood (NLL) and entropy values and etc} for each image.
     \item These computed statistics are then passed through multiple fully connected layers to classify whether an image is real or AI-generated.
+    \item Binary cross entropy from comparing with real and AI-generated labels will be used to train only the fully connected layers through backpropagation.
 \end{itemize}
+
+This second stage builds on top of CNN's ability to accurately reconstruct real images learned in the first step, and learns to utilize nuances between their loss statistic to perform classification. 
+
 
 By structuring the model in this two-step process, we ensure that the first stage learns an accurate representation of natural image statistics, which the second stage leverages to effectively detect synthetic images.
 
-The architecture of our neural network consists of two phases: CNN training and entropy based classification. In the CNN, a real image is first fed into a CNN where a predicted representation of the image is outputted. The error between the predicted and expected output would be back propagated to adjust the weights and biases through the layers of neurons. After the CNN is trained, it will be connected to a classifier where entropy based loss would be used to predict whether an image is AI-generated or real. This approach allows for zero-shot generalization, meaning the system can detect new AI-generated images without explicit training on synthetic data.
 
-% Suggested revision (Nathan):
-% Training the architecture of our neural network consists of two phases: (1) CNN training and (2) loss-based classification.
 
-% In stage (1), WILLIAM ADD HERE the downsized versions of real images are given to a CNN as inputs. The CNN will upscale these images and predict their original full-sized versions. The error between the predicted and expected output will be used to adjust the weights and biases of the CNN's filters through backpropagation. This stage is zero-shot, meaning it will not require retraining on synthetic data upon the advent of new image-generating AI models.
 
-% In stage (2), we no longer train the CNN, and it will provide a good model for upscaling real images, but not AI-generated ones. In this stage, we will give the CNN both real and generated images. We will calculate loss statistics on its output, and use these statistics as the input to a classifier. SOME CONCLUSION HERE
+
+
+
 
 \section{Baseline Model}
 \label{baseline}
