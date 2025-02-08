@@ -60,7 +60,7 @@ Student\# 1009052276 \\
 \maketitle
 
 \begin{abstract}
-WRITE ABSTRACT HERE
+This project aims to develop a deep learning model for detecting AI-generated images. Our two-step approach first trains a Convolutional Neural Network (CNN) on real images to learn natural image statistics, then classifies real and synthetic images based on loss metrics from the CNN's output. By leveraging zero-shot learning in the first step, our model adapts to new AI-generation techniques without frequent retraining. This work aims to support media verification, misinformation detection, and digital security.
 %######## APS360: Do not change the next line. This shows your Main body page count.
 ----Total Pages: \pageref{last_page}
 \end{abstract}
@@ -73,22 +73,18 @@ WRITE ABSTRACT HERE
 % We decided not to use the term deep fake, right?
 % We need citations for all our claims
 
-The emergence of realistic AI image generation presents a significant challenge in the current digital landscape. This technology has evolved from simple image modifications to sophisticated videos that can convincingly mimic real individuals \citep{cnn2025}. With tools like Generative Adversarial Networks (GANs) and Diffusion Models (DMs), even non-experts can now generate convincing synthetic media. These media are often imperceptible from authentic content, even to those with specialized knowledge, posing substantial risks to societal trust, personal safety, and information integrity \citep{epstein2023generative}.
-
-% Suggestion (Nathan):
-% The emergence of realistic AI image generation presents a significant challenge in the current digital landscape. This technology has evolved from simple image modifications to sophisticated videos that can convincingly mimic real individuals. With tools like Generative Adversarial Networks (GANs) and Diffusion Models (DMs), even non-experts can now generate convincing synthetic media. These media are often imperceptible from authentic content, even to those with specialized knowledge, posing substantial risks to societal trust, personal safety, and information integrity. CITE ALL CLAIMS
+The emergence of photorealistic artificial intelligence (AI) image generation presents a significant challenge in the current digital landscape. This technology has evolved from simple image modifications to sophisticated videos that can convincingly mimic real individuals \citep{cnn2025}. With tools like Generative Adversarial Networks (GANs) and Diffusion Models (DMs), even non-experts can now generate convincing synthetic media. These media are often indistinguishable from authentic content, even to those with specialized knowledge.
 
 \subsection{Motivation}
 % Comment (Nathan): Cite, don't use "deep fake"
-The rising prevalence of AI image generation applications present significant dangers to societal trust, individual safety, and the integrity of information. AI-based fake image generation has been used to spread misinformation, sway political debates, and jeopardize individual reputations\citep{chesney2019}. Facilitating dishonest behaviors- ranging from impersonating executives for monetary scams to inflicting considerable psychological damage on victims of non-consensual deep fake pornography \citep{TheGuardian2023}. It is also responsible for blurring the line between art made by humans and that produced by AI, challenging traditional concepts of authorship and artistic authenticity\citep{Dipascalido2023}. Hence, the need for a model to combat such issues.
+The rising prevalence of AI image generation applications presents significant dangers to societal trust, individual safety, and the integrity of information \citep{epstein2023generative}. AI image generation has been used to spread misinformation, sway political debates, and jeopardize individual reputations \citep{chesney2019}. It is also responsible for blurring the line between art made by humans and that produced by AI, challenging traditional concepts of authorship and artistic authenticity \citep{Dipascalido2023}. Hence, there is a broad need to accurately identify AI-generated media.
 
 \subsection{Goal}
-The main aim of this project is to create a reliable model based on deep learning that can identify generative AI images. While this discussion emphasizes AI-based images, the approach can be extended to video evaluation. 
-This method aims to distinguish genuine real images from artificial ones with great precision, thereby aiding the larger initiative against digital misinformation. 
+The aim of this project is to create a reliable deep learning model that can distinguish AI-generated images from real ones, aiding the larger initiative against digital misinformation. While we will focus on AI-based images, our approach can be extended to video evaluation.
 
 \subsection{Significance}
 % Comment (Nathan): This feels like it's the same thing as the Motivation, just with different examples
-The significance of this project is rooted in its possible uses across different fields, such as journalism, social media networks, and cybersecurity. With the rising accessibility of `deep fake' creation tools, the potential for their misuse increases. Creating efficient detection systems is vital not only for spotting counterfeit content, but also for rebuilding public trust in digital media. News agencies can employ detection tools to confirm the authenticity of content\citep{Kumarage2023}, whereas social media sites can utilize them to identify or eliminate altered content\citep{clickinsights2023}. Legal experts can utilize these tools for forensic inquiries\citep{Ketsekioulafis2024}, while cybersecurity frameworks can incorporate them to combat biometric spoofing threats\citep{biometricupdate2024}.
+AI-generated image detection is significant to many fields such as journalism, social media networks, and cybersecurity. With the rising accessibility of ``deep fake'' creation tools, the potential for their misuse increases. The creation of efficient detection systems is vital not only for spotting counterfeit content, but also for rebuilding public trust in digital media. News agencies can employ detection tools to question the authenticity of online media \citep{Kumarage2023}, whereas social media sites can utilize them to identify and then handle altered content \citep{clickinsights2023}.
 
 \subsection{Justification for Employing Deep Learning}
 % Comment (Nathan):
@@ -96,23 +92,23 @@ The significance of this project is rooted in its possible uses across different
 % AI conflict?
 % We say later that CNNs don't work all too well. You say that detection systems need to utilize recent developments to anticipate new threats -- (a) what does this mean?, (b) the point of doing zero-shot is that we don't have to continually adapt to new generative models coming out
 % You talk about transfer learning but we aren't using that
-The aim is to fight the AI war with AI. Deep learning is highly effective for the purpose of detecting AI-based generative images because conventional detection techniques depend solely on manually crafted features, which frequently do not manage to grasp the subtle and complex artifacts created during the image generation production. Therefore, detection systems need to be flexible, utilizing the most recent developments in technology to anticipate new threats, implying the application of Deep Learning techniques to sustain the efficacy of detection systems over time\citep{ledig2017}. Deep Learning methods (such as transfer learning) can be employed improving efficacy by utilizing pre-trained models on extensive datasets, minimizing the requirement for significant computational resources and training duration\citep{srivastava2014}. Thus, justifying the use of AI.
+The idea is to fight AI with AI. Deep learning is highly effective for the purpose of detecting AI-generated images because conventional image recognition techniques depend solely on manually crafted features, which cannot grasp the subtle and complex artifacts created during the image generation process. Therefore, detection systems need to be flexible and utilize recent developments in technology, implying the need for deep learning \citep{ledig2017}.
 
-\section{Figure / Illustration}
+\section{Illustration}
 \label{illustration}
 Figure~\ref{fig:high-level-architecture} illustrates our two-step high-level architecture for AI-generated image detection. More details are provided in Section~\ref{sec:architecture}.
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\linewidth]{Fig/high_level_architecture.pdf}
-    \caption{Two-step high level architecture for AI-generated image detection. Step 1 (top) trains a compression and reconstruction model (blue box) solely on real images, which downscales high-resolution images using an average pooling, and learn to reconstruct the high resolution image using CNN layers and logistic probability distribution parameters. Step 2 (bottom) applies the trained model (blue box) to both real and AI-generated images, extracting entropy-based statistics such as Negative Log-Likelihood (NLL) and entropy values. These statistics are passed through multiple fully connected layers for final classification.}
+    \caption{Two-step high level architecture for AI-generated image detection. Step 1 (top) trains a compression and reconstruction model (blue box) solely on real images, which downscales high-resolution images using an average pooling, and learn to reconstruct the high resolution image using convolutional layers and logistic probability distribution parameters. Step 2 (bottom) applies the trained model (blue box) to both real and AI-generated images, extracting entropy-based statistics such as Negative Log-Likelihood (NLL) and entropy values. These statistics are passed through multiple fully connected layers for final classification.}
     \label{fig:high-level-architecture}
 \end{figure}
 
 \section{Background \& Related Work}
 \label{background}
 
-Image synthesis is the process wherein an artificial image is generated by a computer from an input prompt, which may be text or some other form of media. This field exploded after the creation of Generative Adversarial Networks (GAN) in 2014, a deep learning architecture particularly adept at generating photorealistic images \citep{GANfather}. More recently, diffusion models (DM) have also been a popular choice for image synthesis \citep{latent-diffusion}. While many attempts have been made to develop programs that can detect images generated by these architectures, they continually evolve to outsmart old detectors.
+Image synthesis is the process wherein an artificial image is generated by a computer from an input prompt, which may be text or some other form of media. This field exploded after the creation of GANs in 2014, a deep learning architecture particularly adept at generating photorealistic images \citep{GANfather}. More recently, DMs have also been a popular choice for image synthesis \citep{latent-diffusion}. While many attempts have been made to develop programs that can detect images generated by these architectures, they continually evolve to outsmart old detectors.
 
 \subsection{Sightengine}
 
@@ -149,83 +145,77 @@ This method was able to achieve an accuracy of 90\%, better than many other SoTA
 \label{data}
 Our model involves two phases of training (see \ref{arch}). As such, we require five datasets: two training sets, two validation sets, and one testing set. The first phase is trained only on real images, meaning that one training set and one validation set will be comprised only of real images. For the other training and validation sets, it is crucial to process data in order to minimize bias. We have identified the most potentially impactful bias in our data as being the semantic content of the images.
 
-\subsection{Data Collection}
+\subsection{Data Collection and Organization}
 \label{data_coll}
-% Suggestions (Nathan):
-% Do the in-text citations for RAISE and Dresden
-% "mentioned in detail later": reference the section
-% Split into more paragraphs -> easier to read
-% Create a table showing this information (sources, amounts, etc.) -> hard to keep track of numbers in sentences like this
-To guarantee that the model is exposed to a diverse range of semantics, we will utilize two well-established camera-based digital forensics datasets: 1. RAISE: A Raw Images Dataset For Digital Image Forensics; 2.The 'Dresden Image Database' For Benchmarking Digital Image Forensics. These datasets collectively contain approximately 22,000 real images, captured under varying conditions and environments. The model will be trained in two phases which will be mentioned in detail later. For the first phase, 10,000 real images will be allocated for training and 2,000 real images for validation. For the second phase, 5,000 real images will be allocated for training and 1,000 images for validation. The remaining 2,000 real images will be reserved for evaluation in the testing phase. For the second phase, 5,000 synthetic images will also be used to training and 1,000 for validation which enables the model to develop a robust entropy-based understanding of real-world image statistics.
-The testing dataset will be balanced, comprising 2,000 real images and 2,000 AI-generated images. The synthetic images will be sourced from the SyntheticEye AI-Generated Image Dataset [SyntheticEye Reference], which includes images produced by a range of state-of-the-art generative models, including Stable Diffusion, DALL-E, and others. Incorporating AI-generated images from multiple sources ensures that the testing conditions closely reflect real-world inputs, enhancing the model's ability to generalize across diverse synthetic image distributions.
+To guarantee that the model is exposed to a diverse range of semantics, we will utilize two well-established camera-based digital forensics datasets: (1) RAISE \citep{10.1145/2713168.2713194} and (2) the Dresden Image Database \citep{10.1145/1774088.1774427}. These datasets collectively contain approximately 22k real images, captured under varying conditions and environments. We will select synthetic images from three sources: \citet{wang2020cnngeneratedimagessurprisinglyeasy}, \citet{corvi2022detectionsyntheticimagesgenerated}, and \citet{ojha2024universalfakeimagedetectors}, which contain images generated from a variety of GANs and DMs. The number of images in these sets total over 22k, so we will select a subsection of them that (a) matches the semantic content of the 22k real images and (b) represents a variety of AI-generation architectures, ensuring the model's ability to generalize.
+
+The model will be trained in two phases, described in \ref{arch}. The division of data across each phase is detailed in Table \ref{data_splits}.
+
+    \begin{table}[t]
+    \caption{Data splits.}
+    \label{data_splits}
+    \begin{center}
+    \begin{tabular}{llll}
+    \multicolumn{1}{c}{\bf Phase / Split} & \multicolumn{1}{c}{\bf Num. Real Images}    & \multicolumn{1}{c}{\bf Num. Synthetic Images} & \multicolumn{1}{c}{\bf Num. Total Images}
+    \\ \hline \\
+    Step 1 / Training       & 10k   & 0     & 10k \\
+    Step 1 / Validation     & 2k    & 0     & 2k \\
+    Step 2 / Training       & 5k    & 5k    & 10k \\
+    Step 2 / Validation     & 1k    & 1k    & 2k \\
+    Testing                 & 2k    & 2k    & 4k \\             
+    \end{tabular}
+    \end{center}
+    \end{table}
 
 \subsection{Data Modification}
 \label{data_mod}
-For image inputs, the CNN requires a fixed resolution of 256×256 pixels. To ensure compatibility, all images in both the training and testing datasets will be cropped to 256×256 while preserving their essential features.
-Additionally, to prevent any biases arising from variations in image attributes, all datasets will be normalized and standardized. This includes converting all images to RGB color space, ensuring uniform channel distributions across the dataset. Standardizing the color format enhances consistency in feature representation, improving the model's robustness and generalization.
+For image inputs, the CNN requires a fixed resolution of 256×256 pixels. Most images in the datasets we are using are aleady 256×256. However, if we need to use images of larger sizes, they will be cropped to 256×256 while preserving their essential features. We must ensure that all images are uncompressed so that our CNN will properly represent real images.
+
+To prevent any biases arising from variations in image attributes, all datasets will be normalized and standardized. This includes converting all images to RGB color space, ensuring uniform channel distributions across the dataset. Standardizing the color format enhances consistency in feature representation, improving the model's robustness and generalization.
 
 \section{Architecture}
 \label{arch}
 \subsection{Motivation}
 
-Nowadays, image classification models typically use Convolutional Neural Networks (CNN) as their base architecture. Classical CNNs will use datasets that consists of AI-generated images to train and learn special attributes about these artificial pictures. But inefficiencies in the training process of CNNs are starting to surface as more and more image generation models are being released. With more image generation models come different characteristics that the CNN classifier never learned. This leads towards a need for training with the new datasets which both takes time and money (Cozzolino et al. 2024).
+Nowadays, image classification models typically use CNNs as their base architecture. Classical CNNs train on datasets of AI-generated images to learn special features that are otherwise undetectable. However, as more and more image generation models are released, these CNNs are routinely oustmarted. New image generation models carry new characteristics which the CNN never learned. This creates a need for further training with new datasets, which takes both time and money \citep{cozzolino2024zeroshotdetectionaigeneratedimages}.
 
-% Suggestion (Nathan):
-% Nowadays, image classification models typically use Convolutional Neural Networks (CNN) as their base architecture. Classical CNNs train on datasets of AI-generated images to learn special features that are otherwise undetectable. However, as more and more image generation models are released, these CNNs are routinely oustmarted. New image generation models carry new characteristics which the CNN never learned. This creates a need for further training with new datasets, which takes both time and money (Cozzolino et al. 2024) PROPER CITATION.
+Our approach is unique in that the first phase of our model's training process doesn't rely on synthetic data sets. The idea behind this approach is to estimate how ``surprising'' an image is compared to the model of real images that the CNN provides.
 
-% Nathan:
-% We shouldn't use the name "Zero-Shot Entropy Detector". that is the name of the project from the paper and we shouldn't copy that I don't think. We can just talk about (a) zero-shot method(s). Also, only the first stage is zero-shot, just to be clear
-The Zero-Shot Entropy Detector (ZED) is unique in a way that its training process for detecting AI-generated images doesn't rely on synthetic data sets. The main idea behind ZED is to estimate how ``surprising'' an image is compared to the real images it trained on. It is assumed that real images follow a ``natural'' statistic pattern, while AI-generated images typically consists of ``unnatural'' statistical patterns that are detectable \citep{cozzolino2024zeroshotdetectionaigeneratedimages}.
-
-% entropy and nll based, so maybe it's image statistic based?
-% we did used ai images in the second step training
-% I think we need to mention nll entropy is enough to detemine if a image is ai generated from the zed paper
-% Nathan:
-% instead of entropy-based i think we can say loss-based, since we might pick slightly different decision stats. also it might not be clear what entropy is
-% Reference William's figures
-\subsection{Architecture}
+\subsection{Detailed Architecture}
 \label{sec:architecture}
 
 % Training the architecture of our neural network consists of two phases: (1) CNN training and (2) loss-based classification.
-Our proposed model follows a two-step training process: (1) CNN treaing and (2) loss-based classification.
+Our proposed model follows a two-step training process: (1) CNN training and (2) loss-based classification.
 
 \subsubsection{Step 1: Real Image Compression and Reconstruction}
 % In stage (1), WILLIAM ADD HERE the downsized versions of real images are given to a CNN as inputs. The CNN will upscale these images and predict their original full-sized versions.  
 % Comments (Nathan):
 % The model doesn't learn to downscale the images, I think this is just done through average pooling
 % Use \ref{}s to reference your figure
-The first step, illustrated in \ref{fig:high-level-architecture}, involves training an image compression and reconstruction model \textbf{solely on real images}. The model downscale and learns to reconstruct high-resolution images using pooling operations and convolutional layers (CNN). Specifically:
+The first step, illustrated in Figure \ref{fig:high-level-architecture}, involves training an image compression and reconstruction model \textbf{solely on real images}. The model downscales and then learns to reconstruct high-resolution images using pooling operations and convolutional layers. Specifically:
 \begin{itemize}
     \item Real high-resolution images are downscaled through pooling layers and passed to a multi-layered CNN as inputs.
-    \item The CNN extracts essential features and maps them to a latent space representation and upscale these images, and conects to a fully connected layer.
+    \item The CNN extracts essential features, maps them to a latent space representation, upscales them, and connects to a fully connected layer.
     \item The fully connected layer then predicts the \textbf{weight, mean, and scale} parameters for logistic probability distributions, which are used to reconstruct the original high-resolution image.
-    \item The error between the predicted and expected output will be used to adjust the weights and biases of the CNN's filters through backpropagation.
+    \item The loss will be used to adjust the weights and biases of the CNN's filters through backpropagation.
 \end{itemize}
 
-This first stage is zero-shot, meaning it will not require retraining on synthetic data upon the advent of new image-generating AI models. And the CNN will be able to capture statistic features that only real images share. 
+This first stage is zero-shot, meaning it will not require retraining on synthetic data upon the advent of new image-generating AI models. Furthermore, the CNN will be able to capture statistical features that only real images share. 
 
 \subsubsection{Step 2: Real vs. AI-Generated Image Classification}
 % Suggestion (Nathan):
 % In stage (2), we no longer train the CNN, and it will provide a good model for upscaling real images, but not AI-generated ones. In this stage, we will give the CNN both real and generated images. We will calculate loss statistics on its output, and use these statistics as the input to a classifier. SOME CONCLUSION HERE
-The second step, illustrated in \ref{fig:high-level-architecture}, the model is extended to classify images as real or AI-generated. This stage leverages both real and AI-generated datasets:
+In the second step, illustrated in Figure \ref{fig:high-level-architecture}, the model is extended to classify images as real or AI-generated. This stage leverages both real and AI-generated datasets:
 \begin{itemize}
-    \item Input images, including both real and AI-generated high-resolution images, undergo the same compression and reconstruction process as in Step 1.
-    \item Using the obtained \textbf{mean, weight, and scale} parameters, the model computes loss statistics such as \textbf{Negative Log-Likelihood (NLL) and entropy values and etc} for each image.
+    \item Input images, including both real and AI-generated high-resolution images, undergo the same downscaling and reconstruction process as in Step 1.
+    \item Using the obtained \textbf{mean, weight, and scale} parameters, the model computes loss statistics such as \textbf{Negative Log-Likelihood (NLL) and entropy values} for each image.
     \item These computed statistics are then passed through multiple fully connected layers to classify whether an image is real or AI-generated.
-    \item Binary cross entropy from comparing with real and AI-generated labels will be used to train only the fully connected layers through backpropagation.
+    \item Using input image labels as either real or synthetic and binary cross entropy loss, the fully connected layers will be trained using backpropagation.
 \end{itemize}
 
-This second stage builds on top of CNN's ability to accurately reconstruct real images learned in the first step, and learns to utilize nuances between their loss statistic to perform classification. 
-
+This second stage builds on top of CNN's ability to accurately reconstruct real images learned in the first step, and learns to utilize nuances between their loss statistics to perform classification. 
 
 By structuring the model in this two-step process, we ensure that the first stage learns an accurate representation of natural image statistics, which the second stage leverages to effectively detect synthetic images.
-
-
-
-
-
-
-
 
 \section{Baseline Model}
 \label{baseline}
@@ -276,13 +266,12 @@ Notes:
 The implementation of AI-generated image detectors raises several ethical concerns, particularly regarding data collection and privacy. If the dataset used to train the detector contains personal or sensitive images, there is a risk of violating individuals' privacy rights. Additionally, the dataset may be biased, detecting AI-generated images only from certain architectures or sharing certain features while failing to generalize to others.
 
 % Suggestion (Nathan): Maybe tie in better with data processing section? Ie. how will we do this
-To minimize these risks, we ensure that our dataset is obtained from \textbf{peer-reviewed papers and licensed Kaggle datasets}. Furthermore, we use \textbf{balanced, diverse, and multi-source datasets} to reduce bias and avoid over-reliance on any single source, as stated in \ref{data_coll}.
+To minimize these risks, we ensure that our dataset is obtained from \textbf{peer-reviewed papers and licensed Kaggle datasets}. Furthermore, we use \textbf{balanced, diverse, and multi-source datasets} to reduce bias and avoid over-reliance on any single source. For further detail, see \ref{data_coll}.
 
 \subsection{Misuse and Limitations}
-The use of AI-generated image detectors also poses risks related to model accuracy and potential misuse. Due to the inherent uncertainty in AI models, achieving \textbf{perfect reliability} in distinguishing real and AI-generated images is generally infeasible, regardless of how well the model performs during testing. As a result, there is always a possibility of \textbf{false accusations}, where real images are mistakenly classified as AI-generated. The consequences of such misclassifications against legitimate artists can be severe and, in some case, irreversible. To mitigate this, we will explicitly \textbf{disclaim that the model is not 100\% accurate} and should be \textbf{used with caution}. It is meant to assist rather than serve as final proof in any legal or professional decisions.
+The use of AI-generated image detectors also poses risks related to model accuracy and potential misuse. Due to the inherent uncertainty in AI models, achieving \textbf{perfect reliability} in distinguishing real and AI-generated images is generally infeasible, regardless of how well the model performs during testing. As a result, there is always a possibility of \textbf{false accusations}, where real images are mistakenly classified as AI-generated. The consequences of such misclassifications against legitimate artists might be severe and, in some cases, irreversible. To mitigate this, we will explicitly \textbf{disclaim that the model is not 100\% accurate} and should be \textbf{used with caution}. It is meant to assist rather than serve as final proof in any legal or professional decisions.
 
 By taking these measures, we aim to ensure that our AI tool is ethically sound, responsibly deployed, and used within appropriate legal boundaries.
-
 
 \section{Project Plan}
 \label{plan}
@@ -330,11 +319,10 @@ Description of tasks:
     \end{center}
     \end{table}
     
-
 \section{Risk Register}
 \label{risk}
 % no deep fake
-Creating a successful AI-based generative image detection model involves various risks that may affect the project's outcome. This section highlights significant risks, evaluates their probability and effects, and presents detailed mitigation strategies.
+Creating a successful AI-generated image detection model involves various risks that would affect the project's success. This section highlights significant risks, evaluates their probability and effects, and presents detailed mitigation strategies.
 
 \subsection{Insufficient Data Diversity}
 \textbf{Likelihood:} Moderate \\
@@ -387,7 +375,7 @@ Creating a successful AI-based generative image detection model involves various
 \textbf{Mitigation Strategies:}
 \begin{itemize}
     \item \textbf{Architecture Refinement:} Experiment with different CNN architectures to optimize feature extraction from general images. Increase comlexity, number of layers, and number of parameters in the model.
-    \item \textbf{Hyperparameter Tuning:} Use automated techniques like grid search, random search, or Bayesian optimization to fine-tune CNN parameters for optimal performance \citep{bergstra2011}.
+    \item \textbf{Hyperparameter Tuning:} Use automated techniques like grid search, random search, or Bayesian optimization to fine-tune CNN parameters for optimal performance \citep{NIPS2011_86e8f7ab}.
 \end{itemize}
 
 \section{Link to GitHub and Google Colab}
