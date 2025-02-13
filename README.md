@@ -1,2 +1,2 @@
-# Project42
+# AI Generated Image Detector
 4 engineer students are trying to figure it out together...
