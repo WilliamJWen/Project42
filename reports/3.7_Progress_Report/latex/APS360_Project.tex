@@ -57,9 +57,9 @@ Student\# 1009052276 \\
 \maketitle
 
 \begin{abstract}
-% ABSTRACT HERE
-%######## APS360: Do not change the next line. This shows your Main body page count.
-----Total Pages: \pageref{last_page}
+    % ABSTRACT HERE
+    %######## APS360: Do not change the next line. This shows your Main body page count.
+    ----Total Pages: \pageref{last_page}
 \end{abstract}
 
 
@@ -80,11 +80,133 @@ Student\# 1009052276 \\
 
 \subsection{Baseline Model}
 
-% BASELINE MODEL SECTION HERE
+As outlined in the Project Proposal, we wrote a ResNet-inspired CNN inspired by CITE. As detailed in Table \ref{baseline_arch}, it has seven convolutional layers and a total of $1,195,009$ parameters. The hyperparameters we used are those used in CITE, as outlined in our Project Proposal, except for the learning rate and optimizer:
+\begin{itemize}
+    \item The activation function used was ReLU.
+    \item We used a binary cross-entropy loss function.
+    \item We used stochastic gradient descent (SGD) with momentum 0.9.
+    \item We used a batch size of 64.
+    \item We used a learning rate of 0.01.
+    \item We trained over ~3000 iterations, which corresponds to 17 epochs.
+\end{itemize}
+
+Initially, we had proposed using a step decay learning rate scheduler, but this was outperformed by a constant learning rate. Also, we initially planned to use Adam, but SGD outperformed it.
+
+\begin{table}[t]
+    \caption{Baseline model architecture.}
+    \label{baseline_arch}
+    \begin{center}
+        \begin{tabular}{llllll}
+            \multicolumn{1}{c}{\bf Layer No.} & \multicolumn{1}{c}{\bf Layer Type} & \multicolumn{1}{c}{\bf Skip Connection From} & \multicolumn{1}{c}{\bf Output Dimensions (C×H×W)}
+            \\ \hline \\
+            0                                 & Input                              & N/A                                          & 3×256×256                                         \\
+            1                                 & Convolutional                      & None                                         & 64×128×128                                        \\
+            2                                 & Max pooling                        & None                                         & 64×64×64                                          \\
+            3                                 & Batch normalization                & None                                         & 64×64×64                                          \\
+            4                                 & Convolutional                      & None                                         & 64×64×64                                          \\
+            5                                 & Batch normalization                & None                                         & 64×64×64                                          \\
+            6                                 & Convolutional                      & Input to Layer 4                             & 64×64×64                                          \\
+            7                                 & Batch normalization                & None                                         & 64×64×64                                          \\
+            8                                 & Convolutional                      & None                                         & 128×32×32                                         \\
+            9                                 & Batch normalization                & None                                         & 128×32×32                                         \\
+            10                                & Convolutional                      & Input to Layer 7                             & 128×32×32                                         \\
+            11                                & Batch normalization                & None                                         & 128×32×32                                         \\
+            12                                & Convolutional                      & None                                         & 256×16×16                                         \\
+            13                                & Batch normalization                & None                                         & 256×16×16                                         \\
+            14                                & Convolutional                      & Input to Layer 11                            & 256×16×16                                         \\
+            15                                & Average pooling                    & None                                         & 256×4×4                                           \\
+            16                                & Batch normalization                & None                                         & 256×4×4 → 4096                                    \\
+            17                                & Fully connected                    & None                                         & 1                                                 \\
+        \end{tabular}
+    \end{center}
+\end{table}
+
+We observed that, across various hyperparameter combinations, validation curves were quite jagged, though they declined with the training curve (see Figure \ref{baseline_curves}). The model learns the training data slowly, yet struggles to generalize. This is most likely due to the complex nature of the task, which demands greater parameters and epochs than ours. In our best model we were able to achieve a validation and testing accuracy of $68.3\%$; detailed classification statistics for each split can be seen in Table \ref{baseline_stats}.
+
+\begin{table}[t]
+    \caption{Baseline model error statistics.}
+    \label{baseline_stats}
+    \begin{center}
+        \begin{tabular}{llllll}
+            \multicolumn{1}{c}{\bf Split} & \multicolumn{1}{c}{\bf Loss} & \multicolumn{1}{c}{\bf Accuracy} & \multicolumn{1}{c}{\bf Precision} & \multicolumn{1}{c}{\bf Recall} & \multicolumn{1}{c}{\bf F1 Score}
+            \\ \hline \\
+            Training                      & 0.188                        & 92.6\%                           & 93.5\%                            & 91.6\%                         & 92.5\%                           \\
+            Validation                    & 0.939                        & 68.3\%                           & 69.3\%                            & 65.7\%                         & 67.4\%                           \\
+            Testing                       & 0.950                        & 68.3\%                           & 70.5\%                            & 62.9\%                         & 66.4\%                           \\
+        \end{tabular}
+    \end{center}
+\end{table}
+
+\begin{figure}[h]
+    \label{baseline_curves}
+    \begin{center}
+        \includegraphics[scale=0.45]{figs/baseline_error_curves.png}
+        \includegraphics[scale=0.45]{figs/baseline_loss_curves.png}
+    \end{center}
+    \caption{Training/validation error (left) and loss (right) curves for the best baseline model.}
+\end{figure}
+
+NEED QUALITATIVE OBSERVATION
 
 \subsection{Primary Model}
 
-% PRIMARY MODEL SECTION HERE
+We outlined a two-step anomaly detection approach in our Project Proposal. In the first step, we trained a convolutional autoencoder (CAE) to encode and decode real images only. In the second step, we feed both real and AI-generated images into the CAE, compute pixel-wise loss, and give this loss to a convolutional neural network (CNN) which classifies the image as real or AI-generated. The advantage of this two-step strategy is that the first is zero-shot, and would not require retraining upon the advent of new image synthesis models. However, we have struggled with this approach and propose new ideas in section \ref{next_steps}.
+
+\subsubsection{Convolutional Autoencoder}
+
+The purpose of our CAE is to model real images well, so it was trained only on real images. It uses up to seven convolutional layers for the encoder and decoder each. We experimented with 30 different combinations of the following hyperparameters to arrive at our best model so far:
+
+\begin{itemize}
+    \item Activation function (LeakyReLU, ReLU, TRec CITE)
+    \item Use of kernel bias
+    \item Number of encoder/decoder convolutional layers
+    \item Use of He weight initialization
+    \item Batch size
+    \item Learning rate
+    \item Optimizer (Adam, SGD)
+    \item Loss function (mean squared error (MSE), L1 loss, Huber loss, perceptual loss using VGG18 CITE)
+\end{itemize}
+
+Below are a number of the challenges we encountered in training the net and how we overcame them.
+
+\begin{itemize}
+    \item[1.] During early experimentation, we usually used six layers. We noticed early overfitting in a number of cases using SGD (within the first one to four epochs), and hypothesized that the net was too easily memorizing our data since there were too few parameters. We were able to help this issue by using seven convolutional layers instead of six. However, this resulted in higher overall error even over many epochs, since we had not only increased the number of parameters but also reduced the bottleneck size of our autoencoder.
+    \item[2.] Early on, we used a learning rate of 0.01. We also observed that the Adam optimizer was extremely ineffective and could not generalize: validation curves oscillated without decreasing. We then attempted to use a learning rate of 0.0001, and the validation loss greatly decreased in early epochs before overfitting.
+\end{itemize}
+
+Our best model used LeakyReLU, no weight initialization, a batch size of 64, a learning rate of $0.0001$, the Adam optimizer with weight decay of $0.01$, and MSE loss. We also used six encoder/decoder layers, which correspond to a compression ratio of 48. Though this model overfit early during training (see Figure \ref{cae_curves}), we were not able to achieve a lower validation loss before overfitting occurred when using lower learning rates. This model achieves a validation MSE of $8.4\%$ and a test MSE of $8.3\%$, which correspond to about $14.4\%$ absolute error per pixel.
+
+\begin{figure}[h]
+    \label{cae_curves}
+    \begin{center}
+        \includegraphics[width=0.6\textwidth]{figs/cae_error_curves.png}
+    \end{center}
+    \caption{Training/validation error curves for the best convolutional autoencoder.}
+\end{figure}
+
+As mentioned earlier, we want the CAE to model real images well and to model AI-generated images badly. Therefore, we also evaluated this model on a separate test set containing both real and AI-generated images with the expectation that the error would be much higher. However, it was also $8.3\%$, suggesting that our CAE has not learned the characteristics that comprise real images, but rather the semantic content of our dataset and possibly patterns produced by the images' compression. The output of the CAE for one real and one AI-generated image is shown in Figure \ref{reconstructions}. We can see that it reconstructs both with an equal lack of detail, suggesting it has not really learned a good representation of real images. This may due to our compression ratio being too high, or, because the differences between the two classes may be too subtle for our current architecture, like with our baseline model.
+
+\begin{figure}[h]
+    \label{reconstructions}
+    \begin{center}
+        \includegraphics[scale=0.45]{figs/real_face_orig.png}
+        \includegraphics[scale=0.45]{figs/real_face_recon.png}
+        \includegraphics[scale=0.45]{figs/fake_face_orig.png}
+        \includegraphics[scale=0.45]{figs/fake_face_recon.png}
+    \end{center}
+    \caption{Best autoencoder's reconstructions of real (top) and AI-generated (bottom) faces.}
+\end{figure}
+
+\subsubsection{Classifier}
+
+The input to our classifier is the pixel-wise CAE reconstruction loss at the output of our CAE. We have experimented with a number of reconstruction loss functions, such as MSE, L1 loss, and Huber loss.
+
+This step is still in early development. At the moment, our classifier uses the same architecture as our baseline model, but without skip connections. However, we have not been able to achieve much better than random results (approximately 50\% accuracy). As mentioned earlier, this is most likely because our CAE models real and fake images equally well.
+
+\subsubsection{Next Steps}
+\label{next_steps}
+
+- Train CAE so that the loss curve 
 
 \label{last_page}
 
