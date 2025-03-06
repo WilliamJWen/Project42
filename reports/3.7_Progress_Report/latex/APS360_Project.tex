@@ -206,7 +206,15 @@ This step is still in early development. At the moment, our classifier uses the 
 \subsubsection{Next Steps}
 \label{next_steps}
 
-- Train CAE so that the loss curve 
+Below are a number of new ideas we will implement that address our struggles outlined above. Some of them build on our work so far, and others will take us in new directions. They are ordered based on priority.
+
+\begin{itemize}
+    \item[1.] Use transfer learning, such as ResNet or AlexNet: pass our images through a pretrained model, and pass the output either into our autoencoder or directly to a decoder.
+    \item[2.] Use transfer learning to classify our images into a small number of classes (around 10), then train an autoencoder for each class. 
+    \item[3.] Find new data, in particular images that are uncompressed, to either supplement or supplant our current dataset.
+    \item[4.] Continue to experiment with various hyperparameters on our classifier.
+    \item[5.] Follow the method outlined in [CITE ZED paper].
+\end{itemize}
 
 \label{last_page}
 
