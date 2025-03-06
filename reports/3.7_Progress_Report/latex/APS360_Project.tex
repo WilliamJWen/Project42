@@ -121,18 +121,18 @@ Initially, we had proposed using a step decay learning rate scheduler, but this 
     \end{center}
 \end{table}
 
-We observed that, across various hyperparameter combinations, validation curves were quite jagged, though they declined with the training curve (see Figure \ref{baseline_curves}). The model learns the training data slowly, yet struggles to generalize. This is most likely due to the complex nature of the task, which demands greater parameters and epochs than ours. In our best model we were able to achieve a validation and testing accuracy of $68.3\%$; detailed classification statistics for each split can be seen in Table \ref{baseline_stats}.
+We observed that, across various hyperparameter combinations, validation curves were quite jagged, though they declined with the training curve (see Figure \ref{baseline_curves}). The model learns the training data slowly, yet struggles to generalize. This is most likely due to the complex nature of the task, which demands greater parameters and epochs than ours. In our best model we were able to achieve a validation accuracy of 67.0\% and a testing accuracy of 65.6\%. Detailed classification statistics for each split can be seen in Table \ref{baseline_stats}.
 
 \begin{table}[t]
-    \caption{Baseline model error statistics.}
+    \caption{Baseline model error statistics; real images are negatives and AI-generated images are positives.}
     \label{baseline_stats}
     \begin{center}
         \begin{tabular}{llllll}
             \multicolumn{1}{c}{\bf Split} & \multicolumn{1}{c}{\bf Loss} & \multicolumn{1}{c}{\bf Accuracy} & \multicolumn{1}{c}{\bf Precision} & \multicolumn{1}{c}{\bf Recall} & \multicolumn{1}{c}{\bf F1 Score}
             \\ \hline \\
-            Training                      & 0.188                        & 92.6\%                           & 93.5\%                            & 91.6\%                         & 92.5\%                           \\
-            Validation                    & 0.939                        & 68.3\%                           & 69.3\%                            & 65.7\%                         & 67.4\%                           \\
-            Testing                       & 0.950                        & 68.3\%                           & 70.5\%                            & 62.9\%                         & 66.4\%                           \\
+            Training                      & 0.303                        & 87.3\%                           & 85.8\%                            & 89.5\%                         & 87.6\%                           \\
+            Validation                    & 0.947                        & 67.0\%                           & 66.2\%                            & 69.6\%                         & 67.8\%                           \\
+            Testing                       & 0.919                        & 65.6\%                           & 64.7\%                            & 68.5\%                         & 66.6\%                           \\
         \end{tabular}
     \end{center}
 \end{table}
@@ -210,10 +210,11 @@ Below are a number of new ideas we will implement that address our struggles out
 
 \begin{itemize}
     \item[1.] Use transfer learning, such as ResNet or AlexNet: pass our images through a pretrained model, and pass the output either into our autoencoder or directly to a decoder.
-    \item[2.] Use transfer learning to classify our images into a small number of classes (around 10), then train an autoencoder for each class. 
-    \item[3.] Find new data, in particular images that are uncompressed, to either supplement or supplant our current dataset.
-    \item[4.] Continue to experiment with various hyperparameters on our classifier.
-    \item[5.] Follow the method outlined in [CITE ZED paper].
+    \item[2.] Train the autoencoder and classifier end-to-end, with a much shallower autoencoder. However, this solution is not zero-shot.
+    \item[3.] Use transfer learning to classify our images into a small number of classes (around 10), then train an autoencoder for each class. 
+    \item[4.] Find new data, in particular images that are uncompressed, to either supplement or supplant our current dataset.
+    \item[5.] Continue to experiment with various hyperparameters on our classifier.
+    \item[6.] Follow the method outlined in [CITE ZED paper].
 \end{itemize}
 
 \label{last_page}
