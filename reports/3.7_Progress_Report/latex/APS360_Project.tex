@@ -366,7 +366,7 @@ Below are a number of the challenges we encountered in training the net and how 
     \item[2.] Early on, we used a learning rate of 0.01. We also observed that the Adam optimizer was extremely ineffective and could not generalize: validation curves oscillated without decreasing. We then attempted to use a learning rate of 0.0001, and the validation loss greatly decreased in early epochs before overfitting.
 \end{itemize}
 
-Our best model used LeakyReLU, no weight initialization, a batch size of 64, a learning rate of $0.0001$, the Adam optimizer with weight decay of $0.01$, and MSE loss. We also used six encoder/decoder layers, which correspond to a compression ratio of 48. Though this model overfit early during training (see Figure \ref{cae_curves}), we were not able to achieve a lower validation loss before overfitting occurred when using lower learning rates. This model achieves a validation MSE of $8.4\%$ and a test MSE of $8.3\%$, which correspond to about $14.4\%$ absolute error per pixel.
+Our best model used LeakyReLU, no weight initialization, a batch size of 64, a learning rate of $0.0001$, the Adam optimizer with weight decay of $0.01$, and MSE loss. We also used six encoder/decoder layers, which correspond to a compression ratio of 48. Though this model overfit early during training (see Figure \ref{cae_curves}), we were not able to achieve a lower validation loss before overfitting occurred when using lower learning rates. This model achieves a validation MSE of 0.084 and a test MSE of 0.083, which correspond to about 14.4\% absolute error per pixel.
 
 \begin{figure}[h]
     \label{cae_curves}
