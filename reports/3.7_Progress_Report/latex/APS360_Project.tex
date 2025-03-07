@@ -62,6 +62,7 @@ Student\# 1009052276 \\
 \begin{abstract}
     % ABSTRACT HERE
     %######## APS360: Do not change the next line. This shows your Main body page count.
+    This report details the progress on developing a deep learning model for detecting AI-generated images. The model is constructed with a two step approach involving a Convolutional Autoencoder(CAE), which learns real image statistics, and a classifier that differentiates real and synthetic images based on loss from the CAE. The team utilizes the Chameleon dataset which includes semantically balanced real and AI-generated images to train and test the model. Data processing includes splitting the dataset for CAE training and classifier training, and a preprocessing step that involve resizing and normalizing the images. A baseline model consisting a CNN with seven convolutional layers is trained and achieved a validation accuracy of 67\% and testing accuracy of 65.6\%. The CAE of the primary model is also trained but the inability of it to distinguish real and AI-generated images poses a challenge for the team. Future steps include refining the CAE, researching transfer learning, and incorporating additional datasets.
     ----Total Pages: \pageref{last_page}
 \end{abstract}
 
@@ -73,108 +74,58 @@ Student\# 1009052276 \\
 
 \section{Individual Contributions and Responsibilities}
 
-The team holds weekly meetings every Sunday at 10 a.m. online using Zoom to discuss the project's current progress, the direction that the team wants to work towards, and evenly distribute upcoming work. The meeting time is tentatively changed every week depending on all team members’ availability. In case of a need for a time change, the new meeting time will be discussed and communicated on or before Friday of the week. Additionally, the team utilizes WhatsApp for daily communication, small updates, and any questions regarding the project or the course. Under circumstances where additional in-person or online meetings need to be arranged, for example, emergency revisions on project code or documents. A message notification will be sent in WhatsApp and it is expected that all team members react to the message in less than 12 hours.
+The team holds weekly meetings every Sunday at 10 a.m. online using Zoom to discuss the project progress, direction, and task distribution. The meeting time is tentatively changed every week depending on team member availability. In case of a need for a time change, the new meeting time will be discussed and communicated on or before Friday of the week. Additionally, the team utilizes WhatsApp for daily communication, small updates, and any questions regarding the project or the course. Under circumstances where additional meetings need to be arranged, a message notification will be sent in WhatsApp and it is expected that all team members react to the message in less than 12 hours.
 
-To maintain a convenient and clean working environment for the team, a GitHub repository is created for the project where all code, documents and research results are stored. Regarding code development, the team created a Google Colab Notebook where different sections are reserved for building the baseline model and primary model. The written documents will all be done with Latex. When each member makes changes on the Latex file, it is expected that they push their changes to the Github repository as soon as possible. To easily record all tasks and track progress, a Wiki page is created and linked to the Github repository for every deliverable. Each Wiki page contains a table of tasks which includes assigned tasks, internal deadlines, hard deadlines, assignees, and  progessstatus. All team members are expected to update this table once progress has been made on the project.
+To maintain a convenient and clean working environment for the team, a GitHub repository is created for the project where all code, documents and research results are stored. Code development is managed through a Google Colab Notebook where different sections are reserved for building the baseline model and primary model. Written documents are done in Latex. After any modifications, team members are expected to push their change immediately. A Wiki page is created and linked to the Github repository for every deliverable to help track progress. Each Wiki page contains a table of tasks which includes assigned tasks, internal deadlines, hard deadlines, assignees, and progessstatus. All team members are expected to update this table once progress has been made on the project. 
 
 Under the circumstance where a team member cannot meet the internal deadline for a certain task, it is anticipated from them to notify the rest of the team through WhatsApp. The reassigning of tasks will occur either through communicating via WhatsApp or arranging an online meeting via Zoom.
 
-Table \ref{Progress_Report_Task_Distribution} details the task distributions including deadlines and completion status for the Project Progress Report and technical side of the project up to date. Table \ref{Final_Project_Deliverable_Task_Distribution}, \ref{Project_Presentation_Video Task_Distribution} and \ref{Final_Project_Report_Task_Distribution} illustrates a rough future plan for task distributions for all up coming deliverables. 
+Table \ref{Progress_Report_Task_Distribution} details the task distributions including deadlines and completion status for the project’s Progress Report, ongoing and future tasks.
 
 \begin{table}[t]
     \caption{Progress Report Task Distribution}
     \label{Progress_Report_Task_Distribution}
     \begin{center}
-    \begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+    \begin{tabular}{|>{\raggedright\arraybackslash}p{4cm}|>{\raggedright\arraybackslash}p{2.5cm}|>{\raggedright\arraybackslash}p{2cm}|>{\raggedright\arraybackslash}p{2cm}|>{\raggedright\arraybackslash}p{1.5cm}|}
     \hline
-    \textbf{Task} & \textbf{Assignee(s)} & \textbf{Internal Deadline} & \textbf{Completion Status} \\
+    \textbf{Task} & \textbf{Assignee(s)} & \textbf{Internal Deadline} & \textbf{Hard Deadline} & \textbf{Status} \\
     \hline
-    Split Data For Two Step Training Process & William & March. 02, 2025 & completed \\
+    Split Data For Two Step Training Process & William & Mar. 02, 2025 & Mar. 06, 2025 & completed \\
     \hline
-    Build, train, test and debug baseline model & Nathan \& William & March. 03, 2025 & completed \\
+    Build, train, test and debug baseline model & Nathan \& William & Mar. 03, 2025 & Mar. 06, 2025 & completed \\
     \hline
-    Research on Convolutional Auto-encoder Architecture & William & March. 03, 2025 & completed \\
+    Research on Convolutional Auto-encoder Architecture & William & Mar. 03, 2025 & Mar. 06, 2025 & completed \\
     \hline
-    Build, train, test, and debug step 1 of primary model & Nathan \& William & March. 04, 2025 & completed \\
+    Build, train, test, and debug step 1 of primary model & Nathan \& William & Mar. 04, 2025 & Mar. 06, 2025 & completed \\
     \hline
-    Research on existing models that could be applied for Transfer Learning & Paul \& Vedansh & March. 05, 2025 & completed \\
+    Research on existing models that could be applied for Transfer Learning & Paul \& Vedansh & Mar. 05, 2025 & Mar. 06, 2025 & completed \\
     \hline
-    Research on visualization software & William & March. 06, 2025 & completed \\
+    Research on visualization software & William & Mar. 06, 2025 & Mar. 06, 2025 & completed \\
     \hline
-    Research on compression defects removal & William & March. 06, 2025 & completed \\
+    Research on compression defects removal & William & Mar. 06, 2025 & Mar. 06, 2025 & completed \\
     \hline
-    Write Introduction of Progress Report & Vedansh & March. 06, 2025 & completed \\
+    Write Introduction of Progress Report & Vedansh & Mar. 06, 2025 & Mar. 06, 2025 & completed \\
     \hline
-    Write Individual Contributions and Responsibilities for Progress Report & Paul & March. 06, 2025 & completed \\
+    Write Individual Contributions and Responsibilities for Progress Report & Paul & Mar. 06, 2025 & Mar. 06, 2025 & completed \\
     \hline
-    Write Data Processing in Notable Contribution for Progress Report & William & March. 06, 2025 & completed \\
+    Write Data Processing in Notable Contribution for Progress Report & William & Mar. 06, 2025 & Mar. 06, 2025 & completed \\
     \hline
-    Write Baseline Model and Primary Model in Notable Contribution for Progress Report & Nathan & March. 06, 2025 & completed \\
+    Write Baseline Model and Primary Model in Notable Contribution for Progress Report & Nathan & Mar. 06, 2025 & Mar. 06, 2025 & completed \\
     \hline
-    \end{tabularx}
+    Research on Optuna - an automated hyperparameter search tool. Apply it to CAE & Paul & Mar. 15, 2025 & Mar. 20, 2025 & on-going \\
+    \hline
+    Research on more architectures using Resnet. Potentially implement a stronger Resnet architecture & Vedansh \& Paul & Mar. 20, 2025 & Mar. 25, 2025 & on-going \\
+    \hline
+    Reprocess and regroup real images from Chameleon to enhance autoencoder learning & William & Mar. 20, 2025 & Mar. 25, 2025 & on-going \\
+    \hline
+    Explore more architecture configurations for classifier & Nathan & Mar. 20, 2025 & Mar. 25, 2025 & on-going \\
+    \hline
+    \end{tabular}
     \end{center}
     \end{table}
+    
 
-\begin{table}[t]
-    \caption{Final Project Deliverable Task Distribution}
-    \label{Final_Project_Deliverable_Task_Distribution}
-    \begin{center}
-    \begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
-    \hline
-    \textbf{Task} & \textbf{Assignee(s)} & \textbf{Internal Deadline} & \textbf{Hard Deadline} \\
-    \hline
-     &  &  &  \\
-    \hline
-     &  &  &  \\
-    \hline
-     &  &  &  \\
-    \hline
-    \end{tabularx}
-    \end{center}
-    \end{table}
-
-\begin{table}[t]
-    \caption{Project Presentation Video Task Distribution}
-    \label{Project_Presentation_Video_Task_Distribution}
-    \begin{center}
-    \begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
-    \hline
-    \textbf{Task} & \textbf{Assignee(s)} & \textbf{Internal Deadline} & \textbf{Hard Deadline} \\
-    \hline
-    Background introduction of Project and Data Collection & Vedansh & March 31, 2025 & April 4, 2025 \\
-    \hline
-    Data processing & William & March 31, 2025 & April 4, 2025 \\
-    \hline
-    Primary Model & Nathan & March 31, 2025 & April 4, 2025 \\
-    \hline
-    Results of model and conclusion & Paul & March 31, 2025 & April 4, 2025 \\
-    \hline
-    \end{tabularx}
-    \end{center}
-    \end{table}
-
-\begin{table}[t]
-    \caption{Final Project Report Task Distribution}
-    \label{Final_Project_Report_Task_Distribution}
-    \begin{center}
-    \begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
-    \hline
-    \textbf{Task} & \textbf{Assignee(s)} & \textbf{Internal Deadline} & \textbf{Hard Deadline} \\
-    \hline
-    Introduction, Illustration/Figure, Background \& Related Work & Vedansh & April 3, 2025 & April 4, 2025 \\
-    \hline
-    Data Processing, Architecture, Baseline Model & William & April 3, 2025 & April 4, 2025 \\
-    \hline
-    Quantitative \& Qualitative Results, Evaluate Model on New Data & Nathan & April 3, 2025 & April 4, 2025 \\
-    \hline
-    Final Discussion, Ethical Considerations & Paul & April 3, 2025 & April 4, 2025 \\
-    \hline
-    \end{tabularx}
-    \end{center}
-    \end{table}
-
-
-
+    
 \section{Notable Contributions}
 \subsection{Data Processing}
 
