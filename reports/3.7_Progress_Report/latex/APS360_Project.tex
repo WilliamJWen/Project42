@@ -146,15 +146,13 @@ We observed that, across various hyperparameter combinations, validation curves 
     \caption{Training/validation error (left) and loss (right) curves for the best baseline model.}
 \end{figure}
 
-NEED QUALITATIVE OBSERVATION
-
 \subsection{Primary Model}
 
 We outlined a two-step anomaly detection approach in our Project Proposal. In the first step, we trained a convolutional autoencoder (CAE) to encode and decode real images only. In the second step, we feed both real and AI-generated images into the CAE, compute pixel-wise loss, and give this loss to a convolutional neural network (CNN) which classifies the image as real or AI-generated. The advantage of this two-step strategy is that the first is zero-shot, and would not require retraining upon the advent of new image synthesis models. However, we have struggled with this approach and propose new ideas in section \ref{next_steps}.
 
 \subsubsection{Convolutional Autoencoder}
 
-The purpose of our CAE is to model real images well, so it was trained only on real images. It uses up to seven convolutional layers for the encoder and decoder each. We experimented with 30 different combinations of the following hyperparameters to arrive at our best model so far:
+The purpose of our CAE is to model real images well, so it was trained only on real images. It uses up to seven convolutional layers for the encoder and decoder each, with up to $1,970,755$ parameters. We experimented with 30 different combinations of the following hyperparameters to arrive at our best model so far:
 
 \begin{itemize}
     \item Activation function (LeakyReLU, ReLU, TRec CITE)
