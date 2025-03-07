@@ -73,10 +73,101 @@ Student\# 1009052276 \\
 % CONTRIBUTIONS AND RESPONSIBILITIES SECTION HERE
 
 \section{Notable Contributions}
-
 \subsection{Data Processing}
 
-% DATA PROCESSING SECTION HERE
+For data processing, we implemented a two-step approach. The first step splits the data and saves it into properly structured folders for easy extraction later. The second step involves using a data loader to perform random resizing, converting to tensors, and normalizing to mean 0 and standard deviation 1. Separating these steps allows for easy customization of data transformations for different architectures.
+
+\subsubsection{Source of Dataset}
+The dataset for our project, named the \textbf{Chameleon Dataset}, was obtained from the paper \emph{A Sanity Check for AI-Generated Image Detection}, published at ICLR 2025 \citep{yan2024sanity}. We selected this dataset for two main reasons:
+
+\begin{itemize}
+    \item It contains a balanced collection of real and AI-generated images across multiple categories, including humans, animals, objects, and scenes.
+    \item Unlike datasets such as AIGCDDetect and GenImage (Figure \ref{Chameleon}), which contain raw AI-generated images with visible artifacts, the AI-generated images in the Chameleon dataset are carefully refined by photographers and AI artists. These high-quality images have been shown to fool nine off-the-shelf AI-generated image detectors \citep{yan2024sanity}.
+\end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{figs/Chameleon.jpg}
+    \caption{Comparison between AIGCDDetect (a) and GenImage (b) with Chameleon Dataset(c) \citep{yan2024sanity}.}
+    \label{fig:Chameleon}
+\end{figure}
+
+Given our goal of detecting general AI-generated images, training our model on this challenging dataset should enable it to generalize well to common tasks, such as differentiating raw AI-generated images.
+
+\subsubsection{Data Splitting}
+Our model follows a two-step architecture:
+\begin{enumerate}
+    \item \textbf{Step 1:} Training a Convolutional AutoEncoder (CAE) using only real images.
+    \item \textbf{Step 2:} Training a classifier using both real and fake images.
+\end{enumerate}
+
+To prepare our dataset for this architecture, we implemented the following steps:
+\begin{enumerate}
+    \item Load the Chameleon dataset (ZIP file) from Google Drive.
+    \item Unzip the file and extract image paths from the \texttt{01\_real} and \texttt{02\_fake} folders.
+    \item Shuffle the images to ensure randomness in splitting.
+    \item Identify the total number of real images: 14,863.
+    \item Split the real images into two halves:
+    \begin{itemize}
+        \item One half is used for CAE training.
+        \item The other half is paired with fake images for classifier training.
+    \end{itemize}
+    \item Randomly select the same number of fake images (14,863) to ensure a balanced dataset.
+    \item Split the dataset into train, validation, and test sets with a 75-20-5 ratio.
+    \item Store the images in structured directories on a shared Google Drive.
+\end{enumerate}
+
+We have written helper functions to automate these steps, making the process easily reproducible and applicable to other datasets if additional data is required.
+
+Figure \ref{fig:cleaned_statistic} summarizes the number of images in each split:
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figs/cleaned_statistic.png}
+    \caption{Statistics from the processed dataset.}
+    \label{fig:cleaned_statistic}
+\end{figure}
+
+\subsubsection{Data Processing and Augmentation}
+The processing step occurs after loading the data using a data loader. The current preprocessing pipeline involves randomly resizing images to 256x256 through cropping to fit our architecture, converting them to tensors, and normalizing them with a mean of (0.5, 0.5, 0.5) and a standard deviation of (0.5, 0.5, 0.5). 
+
+No data augmentation has been applied yet. However, we are considering methods such as flipping, and color jittering, which may be implemented depending on the training results.
+
+We deliberately chose not to perform compression artifact removal, as we believe that compression artifacts might serve as distinguishing features for AI-generated images. However, we have considered tools for compression defect removal, such as Hi-IR \citep{li2024hierarchicalinformationflowgeneralized}, given that our dataset images are in JPEG format and may be subject to compression loss.
+
+Examples of processed images:
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{figs/data_examples.png}
+    \caption{Examples of cleaned samples from the dataset.}
+    \label{fig:cleaned_sample}
+\end{figure}
+
+\subsubsection{Future Test Set}
+While we have set aside 5\% of the dataset for testing on each step, we still need an external test set to evaluate the model on never-before-seen data as a final step. To achieve this, we plan to:
+
+\begin{itemize}
+    \item Collect 100 real-world images from personal sources, covering humans, animals, objects, and scenes.
+    \item Generate 100 AI-generated images using state-of-the-art generators such as DALL-E, MidJourney, and Stable Diffusion.
+\end{itemize}
+
+\subsubsection{Challenges Faced}
+One of the main challenges we encountered was uploading the Chameleon Dataset, which is approximately 2.7 GB in size. Initially, this process was time-consuming when using a direct upload to Google Drive. To address this, we opted to upload the dataset as a ZIP file and extract it directly within PyTorch, significantly reducing transfer times.
+
+Another challenge was the complexity of our data splitting process. Given that our project requires separate data allocations for the Convolutional AutoEncoder and the classifier, a standard split was not sufficient. We resolved this by implementing helper functions that automate the structured splitting and ensure reproducibility across different datasets
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{figs/baseline.png}
+    \caption{Our baseline model and step 2 classifier}
+    \label{fig: baseline}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{figs/cae_illustration.png}
+    \caption{Illustraion of Convolution Autoencoder}
+    \label{fig:cae}
+\end{figure}
 
 \subsection{Baseline Model}
 
