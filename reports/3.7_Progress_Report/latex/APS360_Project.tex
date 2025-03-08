@@ -80,15 +80,15 @@ The use of deep learning is justified by the non-linear and spatially hierarchic
 
 \section{Individual Contributions and Responsibilities}
 
-The team holds weekly meetings every Sunday at 10 a.m. online using Zoom to discuss the project progress, direction, and task distribution. The meeting time is tentatively changed every week depending on team member availability. In case of a need for a time change, the new meeting time will be discussed and communicated on or before Friday of the week. Additionally, the team utilizes WhatsApp for daily communication, small updates, and any questions regarding the project or the course. Under circumstances where additional meetings need to be arranged, a message notification will be sent in WhatsApp and it is expected that all team members react to the message in less than 12 hours.
+The team holds weekly meetings every Sunday at 10 a.m. online using Zoom to discuss the project progress, direction, and task distribution. The meeting time is tentatively changed every week depending on team member availability. In case of a need for a time change, the new meeting time is discussed and communicated on or before the Friday of the week. The team utilizes WhatsApp for daily communication, small updates, and any questions regarding the project or the course. Under circumstances where additional meetings need to be arranged, a member will send a WhatsApp message and it is expected that all team members will react to the message in less than 12 hours.
 
-To maintain a convenient and clean working environment for the team, a GitHub repository is created for the project where all code, documents and research results are stored. Code development is managed through a Google Colab Notebook where different sections are reserved for building the baseline model and primary model. Written documents are done in Latex. After any modifications, team members are expected to push their change immediately. A Wiki page is created and linked to the Github repository for every deliverable to help track progress. Each Wiki page contains a table of tasks which includes assigned tasks, internal deadlines, hard deadlines, assignees, and progessstatus. All team members are expected to update this table once progress has been made on the project. 
+To maintain a convenient and clean working environment, we store all code, documents, and research apart from our data in our GitHub repository. Code development is managed through a Google Colab Notebook with three sections: Data Processing, Baseline Model, and Primary Model. Written documents are done in LaTeX. The GitHub repository includes a Wiki which allows us to track our progress. Each Wiki page contains a table of assigned tasks, internal deadlines, hard deadlines, assignees, and task statuses. All team members are expected to regularly update this table.
 
-Under the circumstance where a team member cannot meet the internal deadline for a certain task, it is anticipated from them to notify the rest of the team through WhatsApp. The reassigning of tasks will occur either through communicating via WhatsApp or arranging an online meeting via Zoom.
+Under the circumstance where a team member cannot meet the internal deadline for a certain task, they shall notify the rest of the team through WhatsApp. Tasks will be reassigned either through WhatsApp communication or during a Zoom meeting.
 
-Table \ref{Progress_Report_Task_Distribution} details the task distributions including deadlines and completion status for the project’s Progress Report, ongoing and future tasks.
+Table \ref{Progress_Report_Task_Distribution} details our current task distributions, including deadlines and completion statuses, for the Progress Report and the project itself.
 
-\begin{table}[t]
+\begin{table}[htp]
     \caption{Progress Report Task Distribution}
     \label{Progress_Report_Task_Distribution}
     \begin{center}
@@ -128,7 +128,7 @@ Table \ref{Progress_Report_Task_Distribution} details the task distributions inc
     \hline
     \end{tabular}
     \end{center}
-    \end{table}
+\end{table}
     
 
     
@@ -275,72 +275,20 @@ As mentioned earlier, we want the CAE to model real images well and to model AI-
 The input to our classifier is the pixel-wise CAE reconstruction loss at the output of our CAE. We have experimented with a number of reconstruction loss functions, such as MSE, L1 loss, and Huber loss.
 
 This step is still in early development. At the moment, our classifier uses the same architecture as our baseline model, but without skip connections. However, we have not been able to achieve much better than random results. As mentioned earlier, this is most likely because our CAE models real and fake images equally well.
-\subsection{Transfer Learning as a Contingency Model}
+\subsection{Transfer Learning: ResNet}
+\label{transfer_learning}
 
-\subsubsection{Motivation}
-While our primary two-step CAE-based architecture offers zero-shot adaptability to new generators, initial validation results (67.0\% accuracy) indicated room for improvement. To ensure project success, we developed a contingency model using transfer learning—a proven approach in synthetic media detection \citep{cozzolino2024raisingbaraigeneratedimage}. This alternative pipeline bypasses CAE reconstruction and directly classifies images using pretrained features.
+Due to our struggles with developing a zero-shot model, we have begun developing a ``backup'' model to ensure project success. This model is a classifier which uses a pretrained ResNet18 trained on ImageNet with frozen convolutional layers. At the output of these convolutional layers, we trained a 512-unit fully connected layer which feeds into a single output neuron. This hidden layer uses ReLU activation and dropout with $p=0.5$. We used binary cross-entropy loss, the Adam optimizer, and trained for 25 epochs.
 
-\subsubsection{Implementation}
-
-\paragraph{Dataset:}
-Reused the Step 2 balanced dataset (5k real + 5k synthetic images) from the Chameleon corpus.
-
-\paragraph{Preprocessing:} Center-cropped to 256$\times$256, normalized to $\mu=0.5$, $\sigma=0.5$ (identical to primary model).
-
-\paragraph{Architecture:}
-\begin{itemize}
-    \item \textbf{Backbone:} ResNet18 pretrained on ImageNet, with frozen convolutional layers.
-    \item \textbf{Classifier:} Custom head with 512-unit fully connected layer, ReLU activation, dropout ($p=0.5$), and sigmoid output.
-\end{itemize}
-
-\paragraph{Training:}
-\begin{itemize}
-    \item \textbf{Loss:} Binary cross-entropy with logits.
-    \item \textbf{Optimizer:} Adam ($lr=0.001$, $\beta_1=0.9$, $\beta_2=0.999$).
-    \item \textbf{Duration:} 25 epochs (1/3 the training time of the CAE-based model).
-\end{itemize}
-
-\subsubsection{Results}
-The transfer learning model achieved state-of-the-art performance, surpassing both our baseline and primary models:
+As shown in Figure \ref{fig:transfer_curves}, the model achieved much greater success than our baseline and primary models: 88.8\% validation accuracy and a corresponding 89.2\% test accuracy. We have not begun tuning hyperparameters (we have only trained the model once) and have only observed minimal overfitting, so there is room to improve this result.
 
 \begin{figure}[h]
     \begin{center}
         \includegraphics[width=0.95\textwidth]{figs/transfer learning graphs.jpg}
     \end{center}
-    \caption{Training and validation loss and accuracy curves for the transfer learning model.}
+    \caption{Training and validation loss and accuracy curves for the ResNet18-based model.}
     \label{fig:transfer_curves}
 \end{figure}
-
-\begin{table}[h!]
-\centering
-\begin{tabular}{lccc}
-\toprule
-\textbf{Model} & \textbf{Validation Accuracy} & \textbf{Test Accuracy} & \textbf{Training Time (Hours)} \\
-\midrule
-Baseline (ResNet-inspired CNN) & 67.0\% & 65.6\% & 8.2 \\
-Primary (CAE + Classifier) & 67.8\% & 66.6\% & 24.5 \\
-Transfer Learning (ResNet18) & 88.8\% & 89.2\% & 6.1 \\
-\bottomrule
-\end{tabular}
-\caption{Performance comparison of models.}
-\end{table}
-
-\paragraph{Key observations:}
-\begin{itemize}
-    \item \textbf{Rapid Convergence:} Validation accuracy plateaued at 88.8\% by Epoch 17 (see Figure \ref{fig:transfer_curves}).
-    \item \textbf{Generalization:} Minimal overfitting (4.2\% gap between training [93.0\%] and validation accuracy).
-    \item \textbf{Efficiency:} Reduced training time by 75\% compared to the CAE-based model.
-\end{itemize}
-
-\subsubsection{Trade-offs}
-While transfer learning delivered superior accuracy, it sacrifices the primary model’s zero-shot capability—a critical feature for adapting to new generators without retraining. This aligns with the "no free lunch" trade-off observed in synthetic detection \citep{yan2024sanity}.
-
-\subsubsection{Future Integration}
-To balance performance and adaptability, we propose:
-\begin{itemize}
-    \item Using ResNet18 as a feature extractor for the CAE in Step 1.
-    \item Training class-specific autoencoders on transfer learning outputs.
-\end{itemize}
 
 \subsection{Next Steps}
 \label{next_steps}
@@ -348,9 +296,10 @@ To balance performance and adaptability, we propose:
 Below are a number of new ideas we will implement that address our struggles outlined above.
 
 \begin{itemize}
-    \item[1.] Use transfer learning, such as ResNet or AlexNet: pass our images through a pretrained model, and pass the output either into our autoencoder or directly to a decoder.
-    \item[2.] Use transfer learning to classify our images into a small number of classes (around 10), then train an autoencoder for each class. 
+    \item[1.] Use transfer learning, such as ResNet: pass our images through a pretrained model, and pass the output either into our autoencoder or directly to a decoder.
+    \item[2.] Use transfer learning to classify our images into a small number of classes based on semantic content (around 10), then train an autoencoder for each class. 
     \item[3.] Find new data, in particular images that are uncompressed, to either supplement or supplant our current dataset.
+    \item[4.] Continue to develop and tune the model described in Section \ref{transfer_learning}.
 \end{itemize}
 
 \label{last_page}
