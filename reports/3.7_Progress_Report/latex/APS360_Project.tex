@@ -135,85 +135,72 @@ Table \ref{Progress_Report_Task_Distribution} details the task distributions inc
 \section{Notable Contributions}
 \subsection{Data Processing}
 
-For data processing, we implemented a two-step approach. The first step splits the data and saves it into properly structured folders for easy extraction later. The second step involves using a data loader to perform random resizing, converting to tensors, and normalizing to mean 0 and standard deviation 1. Separating these steps allows for easy customization of data transformations for different architectures.
-
+For data processing, we implemented a two-step approach. The first step splits the data and saves it into properly structured folders for easy extraction later. The second step uses PyTorch built-in class to preprocess images. 
 \subsubsection{Source of Dataset}
-The dataset for our project, named the \textbf{Chameleon Dataset}, was obtained from the paper \emph{A Sanity Check for AI-Generated Image Detection}, published at ICLR 2025 \citep{yan2024sanity}. We selected this dataset for two main reasons:
+The dataset for our project, named the \textbf{Chameleon Dataset}, was obtained from \emph{A Sanity Check for AI-Generated Image Detection}, published at ICLR 2025 \citep{yan2024sanity}. We selected this dataset for two main reasons:
 
 \begin{itemize}
     \item It contains a balanced collection of real and AI-generated images across multiple categories, including humans, animals, objects, and scenes.
-    \item Unlike datasets such as AIGCDDetect and GenImage (Figure \ref{Chameleon}), which contain raw AI-generated images with visible artifacts, the AI-generated images in the Chameleon dataset are carefully refined by photographers and AI artists. These high-quality images have been shown to fool nine off-the-shelf AI-generated image detectors \citep{yan2024sanity}.
+    \item Unlike datasets such as AIGCDetect \citep{rptc} and GenImage \citep{zhu2023gendet}, which contain raw AI-generated images with visible defects, the AI-generated images in the Chameleon dataset are carefully refined by photographers and AI artists. These high-quality images have been shown to fool nine off-the-shelf AI-generated image detectors \citep{yan2024sanity}.
 \end{itemize}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=1\textwidth]{figs/Chameleon.jpg}
-    \caption{Comparison between AIGCDDetect (a) and GenImage (b) with Chameleon Dataset(c) \citep{yan2024sanity}.}
-    \label{fig:Chameleon}
-\end{figure}
+% \begin{figure}[h]
+%     \centering
+%     \includegraphics[width=1\textwidth]{figs/Chameleon.jpg}
+%     \caption{Comparison between AIGCDDetect (a) and GenImage (b) with Chameleon Dataset(c) \citep{yan2024sanity}.}
+%     \label{fig:Chameleon}
+% \end{figure}
 
-Given our goal of detecting general AI-generated images, training our model on this challenging dataset should enable it to generalize well to common tasks, such as differentiating raw AI-generated images.
+Given our goal of detecting general AI-generated images (raw and adjusted), training our model on this challenging dataset should enable it to generalize well to achieve our goal.
 
 \subsubsection{Data Splitting}
-Our model follows a two-step architecture:
-\begin{enumerate}
-    \item \textbf{Step 1:} Training a Convolutional AutoEncoder (CAE) using only real images.
-    \item \textbf{Step 2:} Training a classifier using both real and fake images.
-\end{enumerate}
 
-To prepare our dataset for this architecture, we implemented the following steps:
+To prepare our dataset for our two-step architecture in Section \ref{primary_model}, we implemented the following steps:
 \begin{enumerate}
     \item Load the Chameleon dataset (ZIP file) from Google Drive.
-    \item Unzip the file and extract image paths from the \texttt{01\_real} and \texttt{02\_fake} folders.
+    \item Unzip the file and extract image paths from the \texttt{01\_real} and \texttt{02\_fake} subfolders.
     \item Shuffle the images to ensure randomness in splitting.
     \item Identify the total number of real images: 14,863.
-    \item Split the real images into two halves:
-    \begin{itemize}
-        \item One half is used for CAE training.
-        \item The other half is paired with fake images for classifier training.
-    \end{itemize}
-    \item Randomly select the same number of fake images (14,863) to ensure a balanced dataset.
+    \item Split the real images into two halves, 7,431 for step 1 CAE and 7,432 for step 2 classifier.
+    \item Randomly select the same number of fake images (7,432) to ensure a balanced dataset for step 2.
     \item Split the dataset into train, validation, and test sets with a 75-20-5 ratio.
     \item Store the images in structured directories on a shared Google Drive.
 \end{enumerate}
 
-We have written helper functions to automate these steps, making the process easily reproducible and applicable to other datasets if additional data is required.
-
-Figure \ref{fig:cleaned_statistic} summarizes the number of images in each split:
+The folder structure and number of samples in each class for the two steps is shown in Figure \ref{fig:cleaned_statistic}.
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.6\textwidth]{figs/cleaned_statistic.png}
-    \caption{Statistics from the processed dataset.}
-    \label{fig:cleaned_statistic}
+    \begin{minipage}[t]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/cleaned_statistic.png}
+        \caption{Processed Data Stats.}
+        \label{fig:cleaned_statistic}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.6\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/data_examples_2by3.png}
+        \caption{Examples of 4 cleaned samples from the dataset.}
+        \label{fig:cleaned_sample}
+    \end{minipage}
 \end{figure}
 
 \subsubsection{Data Processing and Augmentation}
-The processing step occurs after loading the data using a data loader. The current preprocessing pipeline involves randomly resizing images to 256x256 through cropping to fit our architecture, converting them to tensors, and normalizing them with a mean of (0.5, 0.5, 0.5) and a standard deviation of (0.5, 0.5, 0.5). 
+The processing step occurs when loading the data using \texttt{ImageFolder} and \texttt{Transforms}. The current preprocessing pipeline involves randomly resizing images to 256x256 through cropping to fit our architecture, converting them to tensors, and normalizing them with a mean of (0.5, 0.5, 0.5) and a standard deviation of (0.5, 0.5, 0.5). 
 
 No data augmentation has been applied yet. However, we are considering methods such as flipping, and color jittering, which may be implemented depending on the training results.
 
-We deliberately chose not to perform compression artifact removal, as we believe that compression artifacts might serve as distinguishing features for AI-generated images. However, we have considered tools for compression defect removal, such as Hi-IR \citep{li2024hierarchicalinformationflowgeneralized}, given that our dataset images are in JPEG format and may be subject to compression loss.
+We deliberately chose not to perform compression artifact removal, as we believe this might remove original defects from AI-generated images that might serve as distinguishing features. However, we have considered tools for compression defect removal, such as Hi-IR \citep{li2024hierarchicalinformationflowgeneralized}.
 
-Examples of processed images:
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=1\textwidth]{figs/data_examples.png}
-    \caption{Examples of cleaned samples from the dataset.}
-    \label{fig:cleaned_sample}
-\end{figure}
+Examples of processed images are shown in Figure \ref{fig:cleaned_sample}.
+
 
 \subsubsection{Future Test Set}
-While we have set aside 5\% of the dataset for testing on each step, we still need an external test set to evaluate the model on never-before-seen data as a final step. To achieve this, we plan to:
-
-\begin{itemize}
-    \item Collect 100 real-world images from personal sources, covering humans, animals, objects, and scenes.
-    \item Generate 100 AI-generated images using state-of-the-art generators such as DALL-E, MidJourney, and Stable Diffusion.
-\end{itemize}
+While we have set aside 5\% of the dataset for testing on each step, we still need an external test set to evaluate the model on never-before-seen data as a final step. To achieve this, we plan to
+collect 100 real-world images from personal sources, covering humans, animals, objects, and scenes and generate 100 AI-generated images using state-of-the-art generators such as DALL-E, MidJourney, and Stable Diffusion.
 
 \subsubsection{Challenges Faced}
-One of the main challenges we encountered was uploading the Chameleon Dataset, which is approximately 2.7 GB in size. Initially, this process was time-consuming when using a direct upload to Google Drive. To address this, we opted to upload the dataset as a ZIP file and extract it directly within PyTorch, significantly reducing transfer times.
-
-Another challenge was the complexity of our data splitting process. Given that our project requires separate data allocations for the Convolutional AutoEncoder and the classifier, a standard split was not sufficient. We resolved this by implementing helper functions that automate the structured splitting and ensure reproducibility across different datasets
+One of the challenges we encountered was uploading the Chameleon Dataset, which is approximately 2.7 GB in size. Initially, this process was time-consuming when using a direct upload to Google Drive. To address this, we opted to upload the dataset as a ZIP file and extract it directly within PyTorch, significantly reducing transfer times.
 
 \subsection{Baseline Model}
 
@@ -253,6 +240,7 @@ We observed that, across various hyperparameter combinations, validation curves 
 \end{figure}
 
 \subsection{Primary Model}
+\label{primary_model}
 
 We outlined a two-step anomaly detection approach in our Project Proposal. In the first step, we trained a convolutional autoencoder (CAE) to encode and decode real images only. In the second step, we feed both real and AI-generated images into the CAE, compute pixel-wise loss, and give this loss to a convolutional neural network (CNN) which classifies the image as real or AI-generated. The advantage of this two-step strategy is that the first is zero-shot, and would not require retraining upon the advent of new image synthesis models. However, we have struggled with this approach, and propose new ideas in Section \ref{next_steps}.
 
