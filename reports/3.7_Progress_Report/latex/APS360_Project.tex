@@ -66,7 +66,7 @@ Student\# 1009052276 \\
 \begin{abstract}
     % ABSTRACT HERE
     %######## APS360: Do not change the next line. This shows your Main body page count.
-    This report details the progress on developing a deep learning model for detecting AI-generated images. The model is constructed with a two step approach involving a Convolutional Autoencoder(CAE), which learns real image statistics, and a classifier that differentiates real and synthetic images based on loss from the CAE. The team utilizes the Chameleon dataset which includes semantically balanced real and AI-generated images to train and test the model. Data processing includes splitting the dataset for CAE training and classifier training, and a preprocessing step that involve resizing and normalizing the images. A baseline model consisting a CNN with seven convolutional layers is trained and achieved a validation accuracy of 67\% and testing accuracy of 65.6\%. The CAE of the primary model is also trained but the inability of it to distinguish real and AI-generated images poses a challenge for the team. Future steps include refining the CAE, researching transfer learning, and incorporating additional datasets.
+    This report details the progress on developing a deep learning model for detecting AI-generated images. The model is constructed with a two step approach involving a convolutional autoencoder (CAE), which learns real image statistics, and a classifier that differentiates real and synthetic images based on loss from the CAE. The team utilizes the Chameleon dataset which includes semantically balanced real and AI-generated images to train and test the model. Data processing includes splitting the dataset for CAE training and classifier training, and a preprocessing step that involve resizing and normalizing the images. A baseline model consisting a convolutional neural network (CNN) with seven convolutional layers is trained and achieved a validation accuracy of 67\% and testing accuracy of 65.6\%. The CAE of the primary model is also trained but the inability of it to distinguish real and AI-generated images poses a challenge for the team. Future steps include refining the CAE, researching transfer learning, and incorporating additional datasets.
     ----Total Pages: \pageref{last_page}
 \end{abstract}
 
@@ -74,7 +74,7 @@ Student\# 1009052276 \\
 
 \section{Project Description}
 
-The proliferation of AI-generated imagery poses a significant threat to digital trust, enabling malicious applications such as deepfake-driven disinformation, identity fraud, and synthetic media that evade human detection. Current methods struggle to generalize across evolving generative architectures, such as diffusion models and GANs, which produce artifacts imperceptible to conventional forensic tools. To address this challenge, our project develops a deep learning system to detect AI-generated images through a novel two-step framework. First, we train a Convolutional Autoencoder (CAE) on real images to model natural image statistics. Second, we classify real versus synthetic images using reconstruction errors from the CAE. This work is significant as it directly addresses urgent needs in journalism, social media moderation, and cybersecurity.
+The proliferation of AI-generated imagery poses a significant threat to digital trust, enabling malicious applications such as deepfake-driven disinformation, identity fraud, and synthetic media that evade human detection. Current methods struggle to generalize across evolving generative architectures, such as diffusion models and GANs, which produce artifacts imperceptible to conventional forensic tools. To address this challenge, our project develops a deep learning system to detect AI-generated images through a novel two-step framework. First, we train a CAE on real images to model natural image statistics. Second, we classify real versus synthetic images using reconstruction errors from the CAE. This work is significant as it directly addresses urgent needs in journalism, social media moderation, and cybersecurity.
 
 The use of deep learning is justified by the non-linear and spatially hierarchical nature of AI-generated artifacts, which require convolutional networks to capture subtle, model-specific distortions. Traditional methods, such as spectral analysis, fail to generalize across architectures like DALL-E and Stable Diffusion. Our CAE-based approach builds on zero-shot entropy detection while leveraging transfer learning with pretrained ResNet18 features for robust generalization. By decoupling feature learning from classification, our approach enables zero-shot adaptation to new AI generators without retraining—a critical advantage over static detectors.
 
@@ -92,50 +92,50 @@ Table \ref{Progress_Report_Task_Distribution} details our current task distribut
     \caption{Progress Report Task Distribution}
     \label{Progress_Report_Task_Distribution}
     \begin{center}
-    \begin{tabular}{|>{\raggedright\arraybackslash}p{4cm}|>{\raggedright\arraybackslash}p{2.5cm}|>{\raggedright\arraybackslash}p{2cm}|>{\raggedright\arraybackslash}p{2cm}|>{\raggedright\arraybackslash}p{1.5cm}|}
-    \hline
-    \textbf{Task} & \textbf{Assignee(s)} & \textbf{Internal Deadline} & \textbf{Hard Deadline} & \textbf{Status} \\
-    \hline
-    Split Data For Two Step Training Process & William & Mar. 02, 2025 & Mar. 06, 2025 & completed \\
-    \hline
-    Build, train, test and debug baseline model & Nathan \& William & Mar. 03, 2025 & Mar. 06, 2025 & completed \\
-    \hline
-    Research on Convolutional Auto-encoder Architecture & William & Mar. 03, 2025 & Mar. 06, 2025 & completed \\
-    \hline
-    Build, train, test, and debug step 1 of primary model & Nathan \& William & Mar. 04, 2025 & Mar. 06, 2025 & completed \\
-    \hline
-    Research on existing models that could be applied for Transfer Learning & Paul \& Vedansh & Mar. 05, 2025 & Mar. 06, 2025 & completed \\
-    \hline
-    Research on visualization software & William & Mar. 06, 2025 & Mar. 06, 2025 & completed \\
-    \hline
-    Research on compression defects removal & William & Mar. 06, 2025 & Mar. 06, 2025 & completed \\
-    \hline
-    Write Introduction of Progress Report & Vedansh & Mar. 06, 2025 & Mar. 06, 2025 & completed \\
-    \hline
-    Write Individual Contributions and Responsibilities for Progress Report & Paul & Mar. 06, 2025 & Mar. 06, 2025 & completed \\
-    \hline
-    Write Data Processing in Notable Contribution for Progress Report & William & Mar. 06, 2025 & Mar. 06, 2025 & completed \\
-    \hline
-    Write Baseline Model and Primary Model in Notable Contribution for Progress Report & Nathan & Mar. 06, 2025 & Mar. 06, 2025 & completed \\
-    \hline
-    Research on Optuna - an automated hyperparameter search tool. Apply it to CAE & Paul & Mar. 15, 2025 & Mar. 20, 2025 & on-going \\
-    \hline
-    Research on more architectures using Resnet. Potentially implement a stronger Resnet architecture & Vedansh \& Paul & Mar. 20, 2025 & Mar. 25, 2025 & on-going \\
-    \hline
-    Reprocess and regroup real images from Chameleon to enhance autoencoder learning & William & Mar. 20, 2025 & Mar. 25, 2025 & on-going \\
-    \hline
-    Explore more architecture configurations for classifier & Nathan & Mar. 20, 2025 & Mar. 25, 2025 & on-going \\
-    \hline
-    \end{tabular}
+        \begin{tabular}{|>{\raggedright\arraybackslash}p{4cm}|>{\raggedright\arraybackslash}p{2.5cm}|>{\raggedright\arraybackslash}p{2cm}|>{\raggedright\arraybackslash}p{2cm}|>{\raggedright\arraybackslash}p{1.5cm}|}
+            \hline
+            \textbf{Task}                                                                                     & \textbf{Assignee(s)} & \textbf{Internal Deadline} & \textbf{Hard Deadline} & \textbf{Status} \\
+            \hline
+            Split Data For Two Step Training Process                                                          & William              & Mar. 02, 2025              & Mar. 06, 2025          & completed       \\
+            \hline
+            Build, train, test and debug baseline model                                                       & Nathan \& William    & Mar. 03, 2025              & Mar. 06, 2025          & completed       \\
+            \hline
+            Research on Convolutional Auto-encoder Architecture                                               & William              & Mar. 03, 2025              & Mar. 06, 2025          & completed       \\
+            \hline
+            Build, train, test, and debug step 1 of primary model                                             & Nathan \& William    & Mar. 04, 2025              & Mar. 06, 2025          & completed       \\
+            \hline
+            Research on existing models that could be applied for Transfer Learning                           & Paul \& Vedansh      & Mar. 05, 2025              & Mar. 06, 2025          & completed       \\
+            \hline
+            Research on visualization software                                                                & William              & Mar. 06, 2025              & Mar. 06, 2025          & completed       \\
+            \hline
+            Research on compression defects removal                                                           & William              & Mar. 06, 2025              & Mar. 06, 2025          & completed       \\
+            \hline
+            Write Introduction of Progress Report                                                             & Vedansh              & Mar. 06, 2025              & Mar. 06, 2025          & completed       \\
+            \hline
+            Write Individual Contributions and Responsibilities for Progress Report                           & Paul                 & Mar. 06, 2025              & Mar. 06, 2025          & completed       \\
+            \hline
+            Write Data Processing in Notable Contribution for Progress Report                                 & William              & Mar. 06, 2025              & Mar. 06, 2025          & completed       \\
+            \hline
+            Write Baseline Model and Primary Model in Notable Contribution for Progress Report                & Nathan               & Mar. 06, 2025              & Mar. 06, 2025          & completed       \\
+            \hline
+            Research on Optuna - an automated hyperparameter search tool. Apply it to CAE                     & Paul                 & Mar. 15, 2025              & Mar. 20, 2025          & on-going        \\
+            \hline
+            Research on more architectures using Resnet. Potentially implement a stronger Resnet architecture & Vedansh \& Paul      & Mar. 20, 2025              & Mar. 25, 2025          & on-going        \\
+            \hline
+            Reprocess and regroup real images from Chameleon to enhance autoencoder learning                  & William              & Mar. 20, 2025              & Mar. 25, 2025          & on-going        \\
+            \hline
+            Explore more architecture configurations for classifier                                           & Nathan               & Mar. 20, 2025              & Mar. 25, 2025          & on-going        \\
+            \hline
+        \end{tabular}
     \end{center}
 \end{table}
-    
 
-    
+
+
 \section{Notable Contributions}
 \subsection{Data Processing}
 
-For data processing, we implemented a two-step approach. The first step splits the data and saves it into properly structured folders for easy extraction later. The second step uses PyTorch built-in class to preprocess images. 
+For data processing, we implemented a two-step approach. The first step splits the data and saves it into properly structured folders for easy extraction later. The second step uses PyTorch built-in classes to preprocess images.
 \subsubsection{Source of Dataset}
 The dataset for our project, named the \textbf{Chameleon Dataset}, was obtained from \emph{A Sanity Check for AI-Generated Image Detection}, published at ICLR 2025 \citep{yan2024sanity}. We selected this dataset for two main reasons:
 
@@ -151,7 +151,7 @@ The dataset for our project, named the \textbf{Chameleon Dataset}, was obtained 
 %     \label{fig:Chameleon}
 % \end{figure}
 
-Given our goal of detecting general AI-generated images (raw and adjusted), training our model on this challenging dataset should enable it to generalize well to achieve our goal.
+Given our goal of detecting general AI-generated images (both raw and adjusted), training our model on this challenging dataset should enable it to generalize well.
 
 \subsubsection{Data Splitting}
 
@@ -161,32 +161,32 @@ To prepare our dataset for our two-step architecture in Section \ref{primary_mod
     \item Unzip the file and extract image paths from the \texttt{01\_real} and \texttt{02\_fake} subfolders.
     \item Shuffle the images to ensure randomness in splitting.
     \item Identify the total number of real images: 14,863.
-    \item Split the real images into two halves, 7,431 for step 1 CAE and 7,432 for step 2 classifier.
+    \item Split the real images into two halves: 7,431 for step 1 (CAE) and 7,432 for step 2 (classifier).
     \item Randomly select the same number of fake images (7,432) to ensure a balanced dataset for step 2.
-    \item Split the dataset into train, validation, and test sets with a 75-20-5 ratio.
+    \item Split the dataset into train, validation, and test sets with a 75/20/5 ratio.
     \item Store the images in structured directories on a shared Google Drive.
 \end{enumerate}
 
 The folder structure and number of samples in each class for the two steps is shown in Figure \ref{fig:cleaned_statistic}.
+
 \begin{figure}[h]
-    \centering
-    \begin{minipage}[t]{0.3\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{figs/cleaned_statistic.png}
-        \caption{Processed Data Stats.}
-        \label{fig:cleaned_statistic}
-    \end{minipage}
-    \hfill
-    \begin{minipage}[t]{0.6\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{figs/data_examples_2by3.png}
-        \caption{Examples of 4 cleaned samples from the dataset.}
-        \label{fig:cleaned_sample}
-    \end{minipage}
+    \begin{center}
+        \includegraphics[scale=0.5]{figs/cleaned_statistic.png}
+    \end{center}
+    \caption{Processed data statistics.}
+    \label{fig:cleaned_statistic}
 \end{figure}
 
 \subsubsection{Data Processing and Augmentation}
-The processing step occurs when loading the data using \texttt{ImageFolder} and \texttt{Transforms}. The current preprocessing pipeline involves randomly resizing images to 256x256 through cropping to fit our architecture, converting them to tensors, and normalizing them with a mean of (0.5, 0.5, 0.5) and a standard deviation of (0.5, 0.5, 0.5). 
+The processing step occurs when loading the data using \texttt{ImageFolder} and \texttt{Transforms}. The current preprocessing pipeline involves randomly resizing images to 256×256 through cropping, converting them to tensors, and normalizing them into the range [$-1$, $1$]. Some examples are shown in Figure \ref{fig:cleaned_sample}.
+
+\begin{figure}[h]
+    \begin{center}
+        \includegraphics[width=0.6\textwidth]{figs/data_examples_2by3.png}
+    \end{center}
+    \caption{Examples of four cleaned samples from the dataset.}
+    \label{fig:cleaned_sample}
+\end{figure}
 
 No data augmentation has been applied yet. However, we are considering methods such as flipping, and color jittering, which may be implemented depending on the training results.
 
@@ -199,7 +199,7 @@ Examples of processed images are shown in Figure \ref{fig:cleaned_sample}.
 While we have set aside 5\% of the dataset for testing on each step, we still need an external test set to evaluate the model on never-before-seen data as a final step. To achieve this, we plan to
 collect 100 real-world images from personal sources, covering humans, animals, objects, and scenes and generate 100 AI-generated images using state-of-the-art generators such as DALL-E, MidJourney, and Stable Diffusion.
 
-\subsubsection{Challenges Faced}
+\subsubsection{Challenges}
 One of the challenges we encountered was uploading the Chameleon Dataset, which is approximately 2.7 GB in size. Initially, this process was time-consuming when using a direct upload to Google Drive. To address this, we opted to upload the dataset as a ZIP file and extract it directly within PyTorch, significantly reducing transfer times.
 
 \subsection{Baseline Model}
@@ -242,7 +242,7 @@ We observed that, across various hyperparameter combinations, validation curves 
 \subsection{Primary Model}
 \label{primary_model}
 
-We outlined a two-step anomaly detection approach in our Project Proposal. In the first step, we trained a convolutional autoencoder (CAE) to encode and decode real images only. In the second step, we feed both real and AI-generated images into the CAE, compute pixel-wise loss, and give this loss to a convolutional neural network (CNN) which classifies the image as real or AI-generated. The advantage of this two-step strategy is that the first is zero-shot, and would not require retraining upon the advent of new image synthesis models. However, we have struggled with this approach, and propose new ideas in Section \ref{next_steps}.
+We outlined a two-step anomaly detection approach in our Project Proposal. In the first step, we trained a CAE to encode and decode real images only. In the second step, we feed both real and AI-generated images into the CAE, compute pixel-wise loss, and give this loss to a CNN which classifies the image as real or AI-generated. The advantage of this two-step strategy is that the first is zero-shot, and would not require retraining upon the advent of new image synthesis models. However, we have struggled with this approach, and propose new ideas in Section \ref{next_steps}.
 
 \subsubsection{Convolutional Autoencoder}
 
@@ -252,11 +252,11 @@ Our main challenge in training using the Adam optimizer effectively. Early on, w
 
 Our best model used LeakyReLU, no weight initialization, a batch size of 64, a learning rate of $0.0001$, the Adam optimizer with weight decay of $0.01$, and MSE loss. We also used six encoder/decoder layers, which correspond to a compression ratio of 48. Though this model overfit early during training (see Figure \ref{fig:cae_curves}), we were not able to achieve a lower validation loss before overfitting occurred when using lower learning rates. This model achieves a validation MSE of 0.084 and a test MSE of 0.083, which correspond to about 14.4\% absolute error per pixel.
 
-\begin{figure}[h]   
+\begin{figure}[h]
     \begin{center}
         \includegraphics[width=0.45\textwidth]{figs/cae_error_curves.png}
     \end{center}
-    \caption{Training/validation error curves for the best convolutional autoencoder.}
+    \caption{Training/validation error curves for the best CAE.}
     \label{fig:cae_curves}
 \end{figure}
 
@@ -297,7 +297,7 @@ Below are a number of new ideas we will implement that address our struggles out
 
 \begin{itemize}
     \item[1.] Use transfer learning, such as ResNet: pass our images through a pretrained model, and pass the output either into our autoencoder or directly to a decoder.
-    \item[2.] Use transfer learning to classify our images into a small number of classes based on semantic content (around 10), then train an autoencoder for each class. 
+    \item[2.] Use transfer learning to classify our images into a small number of classes based on semantic content (around 10), then train an autoencoder for each class.
     \item[3.] Find new data, in particular images that are uncompressed, to either supplement or supplant our current dataset.
     \item[4.] Continue to develop and tune the model described in Section \ref{transfer_learning}.
 \end{itemize}
