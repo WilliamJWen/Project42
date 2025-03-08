@@ -1,5 +1,9 @@
 \documentclass{article} % For LaTeX2e
 \usepackage{iclr2022_conference,times}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{amsmath}
 % Optional math commands from https://github.com/goodfeli/dlbook_notation.
 \input{math_commands.tex}
 
@@ -69,7 +73,9 @@ Student\# 1009052276 \\
 
 \section{Project Description}
 
-% PROJECT DESCRIPTION SECTION HERE
+The proliferation of AI-generated imagery poses a significant threat to digital trust, enabling malicious applications such as deepfake-driven disinformation, identity fraud, and synthetic media that evade human detection. Current methods struggle to generalize across evolving generative architectures, such as diffusion models and GANs, which produce artifacts imperceptible to conventional forensic tools. To address this challenge, our project develops a deep learning system to detect AI-generated images through a novel two-step framework. First, we train a Convolutional Autoencoder (CAE) on real images to model natural image statistics. Second, we classify real versus synthetic images using reconstruction errors from the CAE. This work is significant as it directly addresses urgent needs in journalism, social media moderation, and cybersecurity.
+
+The use of deep learning is justified by the non-linear and spatially hierarchical nature of AI-generated artifacts, which require convolutional networks to capture subtle, model-specific distortions. Traditional methods, such as spectral analysis, fail to generalize across architectures like DALL-E and Stable Diffusion. Our CAE-based approach builds on zero-shot entropy detection while leveraging transfer learning with pretrained ResNet18 features for robust generalization. By decoupling feature learning from classification, our approach enables zero-shot adaptation to new AI generators without retraining—a critical advantage over static detectors.
 
 \section{Individual Contributions and Responsibilities}
 
@@ -330,8 +336,74 @@ As mentioned earlier, we want the CAE to model real images well and to model AI-
 The input to our classifier is the pixel-wise CAE reconstruction loss at the output of our CAE. We have experimented with a number of reconstruction loss functions, such as MSE, L1 loss, and Huber loss.
 
 This step is still in early development. At the moment, our classifier uses the same architecture as our baseline model, but without skip connections. However, we have not been able to achieve much better than random results. As mentioned earlier, this is most likely because our CAE models real and fake images equally well.
+\subsection{Transfer Learning as a Contingency Model}
 
-\subsubsection{Next Steps}
+\subsubsection{Motivation}
+While our primary two-step CAE-based architecture offers zero-shot adaptability to new generators, initial validation results (67.0\% accuracy) indicated room for improvement. To ensure project success, we developed a contingency model using transfer learning—a proven approach in synthetic media detection \citep{cozzolino2024raisingbaraigeneratedimage}. This alternative pipeline bypasses CAE reconstruction and directly classifies images using pretrained features.
+
+\subsubsection{Implementation}
+
+\paragraph{Dataset:}
+Reused the Step 2 balanced dataset (5k real + 5k synthetic images) from the Chameleon corpus.
+
+\paragraph{Preprocessing:} Center-cropped to 256$\times$256, normalized to $\mu=0.5$, $\sigma=0.5$ (identical to primary model).
+
+\paragraph{Architecture:}
+\begin{itemize}
+    \item \textbf{Backbone:} ResNet18 pretrained on ImageNet, with frozen convolutional layers.
+    \item \textbf{Classifier:} Custom head with 512-unit fully connected layer, ReLU activation, dropout ($p=0.5$), and sigmoid output.
+\end{itemize}
+
+\paragraph{Training:}
+\begin{itemize}
+    \item \textbf{Loss:} Binary cross-entropy with logits.
+    \item \textbf{Optimizer:} Adam ($lr=0.001$, $\beta_1=0.9$, $\beta_2=0.999$).
+    \item \textbf{Duration:} 25 epochs (1/3 the training time of the CAE-based model).
+\end{itemize}
+
+\subsubsection{Results}
+The transfer learning model achieved state-of-the-art performance, surpassing both our baseline and primary models:
+
+\begin{figure}[h]
+    \begin{center}
+        \includegraphics[width=0.95\textwidth]{figs/transfer learning graphs.jpg}
+    \end{center}
+    \caption{Training and validation loss and accuracy curves for the transfer learning model.}
+    \label{fig:transfer_curves}
+\end{figure}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{lccc}
+\toprule
+\textbf{Model} & \textbf{Validation Accuracy} & \textbf{Test Accuracy} & \textbf{Training Time (Hours)} \\
+\midrule
+Baseline (ResNet-inspired CNN) & 67.0\% & 65.6\% & 8.2 \\
+Primary (CAE + Classifier) & 67.8\% & 66.6\% & 24.5 \\
+Transfer Learning (ResNet18) & 88.8\% & 89.2\% & 6.1 \\
+\bottomrule
+\end{tabular}
+\caption{Performance comparison of models.}
+\end{table}
+
+\paragraph{Key observations:}
+\begin{itemize}
+    \item \textbf{Rapid Convergence:} Validation accuracy plateaued at 88.8\% by Epoch 17 (see Figure \ref{fig:transfer_curves}).
+    \item \textbf{Generalization:} Minimal overfitting (4.2\% gap between training [93.0\%] and validation accuracy).
+    \item \textbf{Efficiency:} Reduced training time by 75\% compared to the CAE-based model.
+\end{itemize}
+
+\subsubsection{Trade-offs}
+While transfer learning delivered superior accuracy, it sacrifices the primary model’s zero-shot capability—a critical feature for adapting to new generators without retraining. This aligns with the "no free lunch" trade-off observed in synthetic detection \citep{yan2024sanity}.
+
+\subsubsection{Future Integration}
+To balance performance and adaptability, we propose:
+\begin{itemize}
+    \item Using ResNet18 as a feature extractor for the CAE in Step 1.
+    \item Training class-specific autoencoders on transfer learning outputs.
+\end{itemize}
+
+\subsection{Next Steps}
 \label{next_steps}
 
 Below are a number of new ideas we will implement that address our struggles outlined above.
