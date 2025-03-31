@@ -139,7 +139,7 @@ In natural language processing, text is interpreted as a sequence of tokens from
 
 The main issue in designing AI-generated image detectors is that image synthesis models are constantly evolving to circumvent detectors trained on old data. In September 2024, a new zero-shot method was devised which initally only trains on real images \citep{cozzolino2024zeroshotdetectionaigeneratedimages}. First, a CNN is trained to predict real images from encoded versions of those images. Next, the CNN is used to predict both real and fake images from their encoded versions, and loss statistics used to differentiate real images from synthetic ones. Higher loss generally corresponds to AI-generated images, since the CNN provides a good model for real images.
 
-This method was able to achieve an accuracy of 90\%, better than many other SoTA models. However, one drawback is that training and testing datasets were comprised only of uncompressed images.
+This method was able to achieve an accuracy of 90\%, better than many other SoTA models.
 
 \section{Data Processing}
 \label{data}
