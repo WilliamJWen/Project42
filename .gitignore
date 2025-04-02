@@ -182,4 +182,5 @@ cython_debug/
 
 .vscode
 !**/Fig/*
+!**/figs/*
 *.DS_Store
