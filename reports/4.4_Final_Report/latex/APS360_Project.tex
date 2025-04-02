@@ -77,7 +77,13 @@ Student\# 1009052276 \\
 
 \section{Illustration / Figure}
 
-
+\begin{figure}[h]
+    \begin{center}
+        \includegraphics[scale=0.45]{figs/EffiVit.pdf}
+    \end{center}
+    \caption{Final Architecture}
+    \label{fig:EffVit Architecture}
+\end{figure}
 
 \section{Background \& Related Work}
 
@@ -151,7 +157,33 @@ WILLIAM
 
 \section{Architecture}
 
+Our final model leverages a multi-expert approach, leveraging  the power of two pre-trained vision models, Vision Transformer(ViT-/b16) and EfficientNet-b4, to classify images as either real or AI-generated. Our model consists of two main parts, Transfer Learning Encoder and a Fully-Connected Classifier with a total of 104,659,017 parameters. As this is a large amount og weights, we  freeze the pre-trained parameters in the two pre-trained models and only train the 1,311,745 parameters in the classifier part.
 
+\subsection{Transfer Learning Encoder}
+
+Our Encoder takes in images of 224 * 224, and uses separate mean and variance values suggested by Vision Transformer and EfficientNet to normalize the images separately.  We removed the original classifiers of the two model and froze their pretrained weights. Normalized images are then passed into the two pretrained models, and ViT-b/16 and EfficientNet-b4 output feature embeddings of size of 768 and 1792 respectively. And we concatenate the embeddings to further pass into our classifier. 
+
+We selected ViT-b/16 and EfficientNet-b4 due to their distinct architectural strengths, enabling them to capture complementary feature representations. ViT's transformer-based architecture excels at modeling global semantic relationships, while EfficientNet's CNN-based design is adept at extracting local textural and structural details. This diversity of feature extraction is helpful for detecting a different kinds of anomalies in AI-generated images, from semantic inconsistencies to subtle textural and structural artifacts
+
+\subsection{Fully-Connected Classifier}
+
+The concatenated embedding vector is passed through a two layer classification network consisting of the following layers:
+\begin{enumerate}
+    \item[1.]Linear Layer (2560 $\rightarrow$ 512): Projects the input to a 512-dimensional hidden space.
+    \item[2.]ReLU Activation: Introduces non-linearity.
+    \item[3.]Dropout (p=0.5): Regularizes the network and prevents overfitting.
+    \item[4.]Linear Layer (512 $\rightarrow$ 1): Projects the features to a single output neuron, representing the logit for binary classification.
+\end{enumerate}
+Our network focus on training the 1,311,745 trainable parameters in this classifier. 
+
+
+\subsection{Training Details}
+\begin {enumerate}
+    \item[1.]As Vision Transformer's attention mechanism is extremely computationally expensive, we pre-computed embeddings from the training dataset to significantly speed up training and reduce computational resources.
+    \item[2.]Loss Function: BCEWithLogitsLoss.
+    \item[3.]Optimizer: Adam Optimizer with weight decay of 0.005.
+    \item[4.]Training is performed for 30 epochs with a batch size of 32 and a learning rate of 0.001
+\end{enumerate}
 
 \section{Baseline Model}
 
