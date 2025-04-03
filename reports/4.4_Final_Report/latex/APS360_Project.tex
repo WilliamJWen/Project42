@@ -325,50 +325,16 @@ False positives (e.g., misclassifying edited real images as synthetic) could har
 
 \section{Project Difficulty}
 
-\subsection{Inherent Project Difficulty}
-This project addressed an \textbf{exceptionally challenging task}—detecting AI-generated images in a landscape where generative models evolve faster than detection tools. Key factors amplifying difficulty include:
+This project addressed an \textbf{exceptionally challenging task}—detecting AI-generated images in a landscape where generative models evolve faster than detection tools. The difficulty ranged far greater than what is normally observed in the labs. As mentioned in the Discussion section, the team started with Zero shot detection method, onto the 
+an alternative transfer learning apprach as mentioned in the Progress Report, but due to the challenging nature of the project, it failed to do well on new datasets. This presented a challenge for the team, wherein we had to begin the project with a new perspective. The final model presented is an amalgamation of two uniquely chosen transfer learning models, such that both global semantic relationships and local textural details be accomodated, which further is passed through a fully connected classifier to give the final probability of an image to be AI-generated (See Architecture Section).
 
-\begin{itemize}
-    \item \textbf{Rapidly Advancing Threats}: Modern diffusion models (e.g., DALL-E, Stable Diffusion) produce images with fewer artifacts than GANs, as noted in the Final Report’s qualitative results (Section 8).
-    \item \textbf{Adversarial Nature}: Attackers can refine synthetic images (e.g., via JPEG compression) to evade detection, a risk highlighted in the Progress Report’s ethical considerations (Section 7.2).
-    \item \textbf{Data Scarcity}: The Final Report (Section 4.1) details challenges in curating balanced datasets, with synthetic images sourced from CNNDetection, DMImageDetection, and UniversalFakeDetect.
-    \item \textbf{Zero-Shot Requirement}: The Project Proposal (Section 5.1) emphasized detecting images from unseen generators without retraining.
-\end{itemize}
+Due to the ever evolving nature of the data available to use for such a model, the team faced several data sourcing issues, which had to be combatted in a timely manner considering the timeline of the project. Parsing 13,500+ real images from COCO/ImageNet, along with 9000+ fake images from GAN and Diffusion models required high precision data cleaning and classifiying protocols to be followed so that the model picks up the data easily. A lot of time and energy was spent making sure the data set is balanced compliying to ethical priniciples laid down in our Project Proposal.
+Due to the high amounts of data used for training, testing and validation datasets, this required high memory usage, and necessity for Google Collab Pro and A100 GPUs, as T4 GPUs simply can't handle the model with this size. This presented computational requirement challenges that the team combatted with perseverence.
+In total, the team went through 4-5 intermediate models to finally derive the final model.
 
-\subsection{Technical Hurdles Overcome}
-\subsubsection{Architectural Complexity}
-\begin{itemize}
-    \item \textbf{Initial Failure}: The CAE (convolutional autoencoder) proposed in the Project Proposal (Section 5.2.1) achieved random performance, as reconstruction errors for real and synthetic images were nearly identical (MSE = 0.083, Progress Report Figure 6).
-    \item \textbf{Breakthrough}: Transitioning to the hybrid \textbf{ViT-EfficientNet} architecture (Final Report Figure 1) required custom pipelines to fuse ViT (global semantics) and EfficientNet (local textures), as detailed in the Final Report (Section 5.1).
-\end{itemize}
-
-\subsubsection{Computational Constraints}
-\begin{itemize}
-    \item ViT’s self-attention layers demanded significant memory, addressed via mixed-precision training and gradient checkpointing (Final Report Section 5.3).
-\end{itemize}
-
-\subsubsection{Adversarial Robustness}
-\begin{itemize}
-    \item The Progress Report (Section 9) proposed future work on adversarial training for evasion tactics like JPEG compression, though not yet implemented.
-\end{itemize}
-
-\subsection{Performance Relative to Difficulty}
-Despite these hurdles, \textbf{EffVit achieved 85.9\% test accuracy} (Final Report Table 2), exceeding both the baseline CNN (65.6\%) and commercial tools like Sightengine (81\%). Key achievements include:
-
-\begin{itemize}
-    \item \textbf{Superior Generalization}: Detected 83.0\% of GAN-generated images (CycleGAN, StyleGAN) and 59.5\% of diffusion-model outputs (GuidedDiffusion, DALL-E) on external datasets (Final Report Section 8).
-    \item \textbf{Adaptability}: Outperformed the ResNet18 backup model (89.2\% validation accuracy, Progress Report Section 3.4) while adding zero-shot capability.
-\end{itemize}
-
-\subsection{Why Performance Exceeds Expectations}
-\begin{itemize}
-    \item \textbf{Innovative Architecture}: The ViT-EfficientNet hybrid uniquely combined global and local analysis, as justified in the Final Report (Section 5.1).
-    \item \textbf{Rigorous Methodology}: Tested 30+ CAE configurations and 15+ learning rates (Progress Report Table 3).
-    \item \textbf{Ethical Foresight}: Addressed adversarial risks in response to TA feedback (Progress Report Section 7.2).
-\end{itemize}
-
-\subsection{Conclusion}
-This project’s difficulty—rooted in adversarial threats, architectural pivots, and computational limits—far exceeds standard image classification tasks. Yet \textbf{EffVit’s 85.9\% accuracy} (vs. 65.6\% baseline) demonstrates performance surpassing expectations for a student-led initiative, as validated in the Final Report (Section 7).
+No current approach in the market at the moment demonstrates robust generalization to unseen AI architectures (citation), thus the project tries to aid in the unsolved research problem. We claim that despite the challenging nature of the project, the final model does exceptionally well when compared to industry standards.
+Beginning with the Baseline Model (mentioned in Section-), the model outperforms baseline model accuracy of 65.6\% with it's 85.9\% accuracy as seen in Table 2 (reference). Eveen when tested on new data, Synthlens outperforms the baseline model by around 10\%.
+Furthermore, state-of-the art for profit models like Sightengine attain an accuracy of 81\% (See Section Background), our model underforms this by only a mere 5\% margin attesting that our model performs exceptionally well as per the standards of an undergraduate engineering project.
 
 \label{last_page}
 
