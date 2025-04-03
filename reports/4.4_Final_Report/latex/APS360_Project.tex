@@ -313,14 +313,9 @@ However, not all embeddings are equal. As mentioned in Section \ref{arch}, ViT a
 Other than poor performance on diffusion models, our model's biggest limitation is that its training data does not adequately represent images found ``in the wild''. Images on the internet are often heavily compressed or edited, and our dataset, and especially our synthetic images, do not reflect this reality. Future work should not only use data that is more balanced between synthesis architectures, but also should use data augmentation techniques that represent ``the wild''. These techniques would involve applying lossy compression, such as JPEG, WebP, and HEIF compression, one or more times.
 
 \section{Ethical Considerations}
-\subsection{Adversarial Attacks}
-AI-generated images could be modified to evade detection through techniques like JPEG compression or adversarial noise injection. To counter this, future iterations should integrate \textbf{adversarial training} and preprocessing steps such as JPEG artifact analysis. For example, compressing images to 80\% quality before inference could help identify synthetic content resistant to compression.
 
-\subsection{Data Bias and Limitations}
-Our training data overrepresented GAN-generated images (e.g., CycleGAN, StyleGAN), leading to weaker performance on diffusion models (59.5\% accuracy vs. 83\% for GANs). This bias could skew real-world deployment, favoring legacy generators over newer architectures like latent diffusion models. To mitigate this, datasets must be rebalanced with synthetic images from diverse generators.
-
-\subsection{Misuse and Privacy}
-False positives (e.g., misclassifying edited real images as synthetic) could harm creators' reputations. We explicitly disclose the model’s limitations (e.g., lower accuracy on diffusion models) and advocate for its use as an \textbf{assistive tool}, not definitive proof. Additionally, while we used public datasets (ImageNet, COCO), real-world deployment requires protocols to avoid inadvertent use of private or sensitive content.
+Ethical Considerions include misuse of data through false positives (e.g., misclassifying edited real images as synthetic) which could harm creators' reputations. Secondly, AI-generated images could be modified to evade detection through techniques like JPEG compression or adversarial noise injection. To counter this, future iterations can integrate \textbf{adversarial training} and preprocessing steps such as JPEG artifact analysis. For example, compressing images to 80\% quality before inference could help identify synthetic content resistant to compression.
+Our training data overrepresented GAN-generated images, leading to weaker performance on diffusion models (59.5\% accuracy vs. 83\% for GANs). This bias if known can be used to pass through the model for malicious purposes. Thus, we explicitly disclose the model’s limitations and advocate for its use as an \textbf{assistive tool}, not definitive proof. Additionally, while we used public datasets (ImageNet, COCO), real-world deployment requires protocols to avoid inadvertent use of private or sensitive content to avoid privacy issues.
 
 
 \section{Project Difficulty}
