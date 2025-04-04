@@ -80,9 +80,9 @@ Machine learning is critical because traditional methods fail to capture subtle 
 
 \begin{figure}[h]
     \begin{center}
-        \includegraphics[scale=0.45]{figs/EffiVit.pdf}
+        \includegraphics[scale=0.5]{figs/EffiVit.pdf}
     \end{center}
-    \caption{Final Architecture}
+    \caption{Architecture: Multi-expert transfer learning encoder and two-layer fully connected classifier.}
     \label{fig:EffVit Architecture}
 \end{figure}
 
@@ -153,21 +153,33 @@ The exact sizes of our splits can be found in Table \ref{data_splits}.
 \end{table}
 
 \subsection{Data Processing and Augmentation}
+\label{data_processing}
+For pre-processing, we performed center cropping to reduce the size of the images to 224 x 224 pixels to be compatible with both pre-trained models, Vit-b/16 \citep{dosovitskiy2020image} and EfficientNet-b4 \citep{tan2019efficientnet} used in \ref{encoder}. As both pre-trained models we used were trained on ImageNet-1K, images were normalized using its statistics, with a mean of [0.485, 0.456, 0.406] and a standard deviation of [0.229, 0.224, 0.225] to ensure optimal feature extraction.
 
-To speed up training, we pre-computed the concatenated embeddings used to train our classifier. This involved passing the input images through the pre-trained ViT-b/16 and EfficientNet-b4 models, after removing their final classification layers. As these models were pre-trained with different normalization statistics, we applied distinct transformation steps. First, images were center croped to 224x224 pixels to ensure compatibility with both models. Then, for ViT-b/16, images were normalized using a mean of [0.5, 0.5, 0.5] and a standard deviation of [0.5, 0.5, 0.5], scaling pixel values to the range [-1, 1]. For EfficientNet-b4, images were normalized using ImageNet statistics, with a mean of [0.485, 0.456, 0.406] and a standard deviation of [0.229, 0.224, 0.225]. These normalization steps align with the pre-training of the respective models, ensuring optimal feature extraction. The output embeddings from ViT-b/16 (768 dimensions) and EfficientNet-b4 (1792 dimensions) were then concatenated, resulting in a 2560-dimensional vector. This processing step is applied folder-wise, images from each folder from \ref{data_splits} are saved together as an .npz file and will be later loaded using \texttt{TensorFolder} and \texttt{DataLoader} in PyTorch.
+Then, to solve the issue of expensive inference time on vision transformer model, we pre-computed the concatenated embeddings needed to train our classifier and saved in \texttt{.npz} format. More details on this can be found in Section \ref{encoder}. An example of the pre-computed embeddings can be seen in Figure \ref{fig:pre-computation}.
 
-No data augmentation is applied for the training of our final model, as we have a wide variety of images in our collected dataset. But we have explored technique of applying random cropping, random rotation, and color jitering on the fly during the training other images-based architecture we have explored.
+\begin{figure}[h]
+    \begin{center}
+        \includegraphics[scale=0.27]{figs/pre-computation.png}
+    \end{center}
+    \caption{Example of pre-computed embeddings. The real testset has 413 2560-dimensional embeddings and 413 labels of 0.} 
+    \label{fig:pre-computation}
+\end{figure}
+No data augmentation is applied, as we have a wide variety of images in our collected dataset. But we have explored technique of applying random cropping, random rotation, and color jitering on the fly during the training other images-based architecture we have explored.
 
 \section{Architecture}
 \label{arch}
 
-Our final model leverages a multi-expert approach, leveraging  the power of two pre-trained vision models, Vision Transformer(ViT-/b16) and EfficientNet-b4, to classify images as either real or AI-generated. Our model consists of two main parts, Transfer Learning Encoder and a Fully-Connected Classifier with a total of 104,659,017 parameters. As this is a large amount og weights, we  freeze the pre-trained parameters in the two pre-trained models and only train the 1,311,745 parameters in the classifier part.
+As shown in Figure \ref{fig:EffVit Architecture}, our final model leverages a multi-expert approach, combining the power of two pre-trained vision models, Vision Transformer(ViT-/b16) \citep{dosovitskiy2020image} and EfficientNet-b4 \citep{brock2019largescalegantraining}, to classify images as either real or AI-generated. Our model consists of two main parts, Transfer Learning Encoder and a Fully-Connected Classifier with a total of 104,659,017 parameters. 
 
 \subsection{Transfer Learning Encoder}
+\label{encoder}
 
-Our Encoder takes in images of 224 * 224, and uses separate mean and variance values suggested by Vision Transformer and EfficientNet to normalize the images separately.  We removed the original classifiers of the two model and froze their pretrained weights. Normalized images are then passed into the two pretrained models, and ViT-b/16 and EfficientNet-b4 output feature embeddings of size of 768 and 1792 respectively. And we concatenate the embeddings to further pass into our classifier.
+For both pre-trained models, we replaced the original classifiers with identity matrices and frozen their weights. Then, pre-processed images are passed into ViT-/b16 and EfficientNet-b4 to extract rich-content embeddings with dimention of 768 and 1792 respectively. Finally, we concatenate the embeddings to form a 2560 dimentional vector to further pass into our classifier.
 
-We selected ViT-b/16 and EfficientNet-b4 due to their distinct architectural strengths, enabling them to capture complementary feature representations. ViT's transformer-based architecture excels at modeling global semantic relationships, while EfficientNet's CNN-based design is adept at extracting local textural and structural details. This diversity of feature extraction is helpful for detecting a different kinds of anomalies in AI-generated images, from semantic inconsistencies to subtle textural and structural artifacts
+We selected ViT-b/16 and EfficientNet-b4 due to their distinct architectural strengths. ViT's transformer-based architecture excels at modeling global semantic relationships, while EfficientNet's CNN-based design is adept at extracting local textural and structural details \citep{Idrees_2024}. This combination of feature extraction is designed to be helpful for detecting different kinds of anomalies often lies in AI-generated images, from semantic inconsistencies to subtle textural and structural artifacts.
+
+But also due to the fact that ViT's self-attention mechanism is extremely computationally expensive, we pre-computed the embeddings as mentioned in Section \ref{data_processing} and load them into memory during training.
 
 \subsection{Fully-Connected Classifier}
 
@@ -180,13 +192,12 @@ The concatenated embedding vector is passed through a two layer classification n
 \end{enumerate}
 Our network focus on training the 1,311,745 trainable parameters in this classifier.
 
-
 \subsection{Training Details}
 \begin {enumerate}
-\item[1.]As Vision Transformer's attention mechanism is extremely computationally expensive, we pre-computed embeddings from the training dataset to significantly speed up training and reduce computational resources.
-\item[2.]Loss Function: BCEWithLogitsLoss.
-\item[3.]Optimizer: Adam Optimizer with weight decay of 0.005.
-\item[4.]Training is performed for 30 epochs with a batch size of 32 and a learning rate of 0.001
+\item[1.]Loss Function: BCEWithLogitsLoss.
+\item[2.]Optimizer: Adam Optimizer with weight decay of 1e-5.
+\item[3.]We utilized hyperparameter optimization frame work Optuna \citep{akiba2019optuna} to perform hyperparameter searching. 
+\item[4.]Training with 30 epochs, a batch size of 32 and a learning rate of 0.001 stood out.
 \end{enumerate}
 
 \section{Baseline Model}
