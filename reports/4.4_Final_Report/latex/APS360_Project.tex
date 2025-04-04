@@ -72,7 +72,7 @@ Student\# 1009052276 \\
 
 
 \section{Introduction}
-The rise of hyper-realistic AI-generated images has eroded trust in digital media, enabling misinformation, deepfakes, and challenges to artistic authenticity. SynthLens, our project, aims to combat this by developing a robust deep learning model to detect AI-generated images. The goal is to create a tool that generalizes across evolving AI architectures (e.g., GANs, diffusion models) without frequent retraining, supporting journalists, social platforms, and users in verifying content authenticity.
+The rise of hyper-realistic AI-generated images has eroded trust in digital media \citep{digitalcontent2024trust}, enabling misinformation, deepfakes, and challenges to artistic authenticity \citep{Guardian2023}. SynthLens, our project, aims to combat this by developing a robust deep learning model to detect AI-generated images. The goal is to create a tool that generalizes across evolving AI architectures (e.g., GANs, diffusion models) without frequent retraining, supporting journalists, social platforms, and users in verifying content authenticity.
 
 Machine learning is critical because traditional methods fail to capture subtle artifacts produced by modern generators. Deep learning models excel at learning hierarchical features, making them uniquely suited to detect nuanced discrepancies. By leveraging multi-expert transfer learning, SynthLens combines global semantic understanding (via Vision Transformers) and local texture analysis (via EfficientNet), ensuring adaptability and high accuracy in a rapidly evolving landscape.
 
@@ -338,7 +338,7 @@ Due to the ever evolving nature of the data available to use for such a model, t
 Due to the high amounts of data used for training, testing and validation datasets, this required high memory usage, and necessity for Google Collab Pro and A100 GPUs, as T4 GPUs simply can't handle the model with this size. This presented computational requirement challenges that the team combatted with perseverence.
 In total, the team went through 4-5 intermediate models to finally derive the final model.
 
-No current approach in the market at the moment demonstrates robust generalization to unseen AI architectures (citation), thus the project tries to aid in the unsolved research problem. We claim that despite the challenging nature of the project, the final model does exceptionally well when compared to industry standards.
+No current approach in the market at the moment demonstrates robust generalization to unseen AI architectures \citep{Mubarak2023}, thus the project tries to aid in the unsolved research problem. We claim that despite the challenging nature of the project, the final model does exceptionally well when compared to industry standards.
 Beginning with the Baseline Model (mentioned in Section-), the model outperforms baseline model accuracy of 65.6\% with it's 85.9\% accuracy as seen in Table 2 (reference). Eveen when tested on new data, Synthlens outperforms the baseline model by around 10\%.
 Furthermore, state-of-the art for profit models like Sightengine attain an accuracy of 81\% (See Section Background), our model underforms this by only a mere 5\% margin attesting that our model performs exceptionally well as per the standards of an undergraduate engineering project.
 
